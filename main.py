@@ -22,25 +22,25 @@ def enable_cors():
 
 @get('/')
 def main():
-    #try:
-        #try:
-        #    data = request.json()
-        #except:
-        #    raise ValueError
+    try:
+        try:
+            data = request.json()
+        except:
+            raise ValueError
 
-        #if data is None:
-        #    raise ValueError
+        if data is None:
+            raise ValueError
 
-    #except ValueError:
-    #    response.status = 400
-    #    return
+    except ValueError:
+        response.status = 400
+        return
 
-    #except KeyError:
-    #    response.status = 409
-    #    return
+    except KeyError:
+        response.status = 409
+        return
 
-    #response.headers['Content-Type'] = 'application/json'
-    return 'hello world'
-    #return json.dumps({'test': data})
+    response.headers['Content-Type'] = 'application/json'
+    #return 'hello world'
+    return json.dumps({'test': data})
 
 run(host='0.0.0.0', port=argv[1])
