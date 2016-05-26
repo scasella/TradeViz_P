@@ -7,27 +7,40 @@ from sys import argv
 
 import bottle
 from bottle import default_app, request, route, response, get
+import json
 
-bottle.debug(True)
+_allow_origin = '*'
+_allow_methods = 'GET'
+_allow_headers = 'Authorization, Origin, Accept, Content-Type, X-Requested-With'
+
+@hook('after_request')
+def enable_cors():
+    '''Add headers to enable CORS'''
+
+    response.headers['Access-Control-Allow-Origin'] = _allow_origin
+    response.headers['Access-Control-Allow-Methods'] = _allow_methods
+    response.headers['Access-Control-Allow-Headers'] = _allow_headers
 
 @get('/')
-def index():
-    response.content_type = 'text/plain; charset=utf-8'
-    ret =  'Hello world, I\'m %s!\n\n' % os.getpid()
-    ret += 'Request vars:\n'
-    for k, v in request.environ.iteritems():
-        if 'bottle.' in k:
-            continue
-        ret += '%s=%s\n' % (k, v)
+def main():
+    try:
+        try:
+            data = request.json()
+        except:
+            raise ValueError
 
-    ret += '\n'
-    ret += 'Environment vars:\n'
+        if data is None:
+            raise ValueError
 
-    for k, v in env.iteritems():
-        if 'bottle.' in k:
-            continue
-        ret += '%s=%s\n' % (k, v)
+    except ValueError:
+        response.status = 400
+        return
 
-    return ret
+    except KeyError:
+        response.status = 409
+        return
+
+    response.headers['Content-Type'] = 'application/json'
+    return json.dumps({'test': data})
 
 bottle.run(host='0.0.0.0', port=argv[1])
