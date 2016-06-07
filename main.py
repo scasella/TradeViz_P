@@ -271,4 +271,4 @@ def main(tickerSubmit):
     #return 'hello world'
     return json.dumps({'matches': matchedCollect,'current': curCollect,'future': futureCollect, 'extra': extraCollect})
 
-run(host='0.0.0.0', port=argv[1])
+run(port=argv[1])
