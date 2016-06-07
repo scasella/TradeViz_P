@@ -256,9 +256,6 @@ def main(tickerSubmit, numSelect):
         except:
             raise ValueError
 
-        if data is None:
-            raise ValueError
-
     except ValueError:
         response.status = 400
         return
