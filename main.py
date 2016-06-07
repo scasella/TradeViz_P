@@ -246,13 +246,13 @@ def enable_cors():
     response.headers['Access-Control-Allow-Methods'] = _allow_methods
     response.headers['Access-Control-Allow-Headers'] = _allow_headers
 
-@get('/<tickerSubmit>')
-def main(tickerSubmit):
+@get('/<tickerSubmit>/<numSelect>')
+def main(tickerSubmit, numSelect):
     try:
         try:
-            runGo(tickerSubmit,1)
-            runGo(tickerSubmit,2)
-            runGo(tickerSubmit,3)
+            runGo(tickerSubmit,numSelect)
+            runGo(tickerSubmit,numSelect)
+            runGo(tickerSubmit,numSelect)
         except:
             raise ValueError
 
