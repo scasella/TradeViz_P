@@ -248,22 +248,22 @@ def enable_cors():
 
 @get('/<tickerSubmit>/<numSelect>')
 def main(tickerSubmit, numSelect):
-    try:
-        try:
-            runGo(tickerSubmit,numSelect)
-        except:
-            raise ValueError
+    #try:
+    #    try:
+    runGo(tickerSubmit,numSelect)
+    #    except:
+    #        raise ValueError
 
-    except ValueError:
-        response.status = 400
-        return
+    #except ValueError:
+    #    response.status = 400
+    #    return
 
-    except KeyError:
-        response.status = 409
-        return
+    #except KeyError:
+    #    response.status = 409
+    #    return
 
     response.headers['Content-Type'] = 'application/json'
-    return 'hello world'
-    #return json.dumps({'matches': matchedCollect,'current': curCollect,'future': futureCollect, 'extra': extraCollect})
+    #return 'hello world'
+    return json.dumps({'matches': matchedCollect,'current': curCollect,'future': futureCollect, 'extra': extraCollect})
 
 run(host='0.0.0.0', port=argv[1])
