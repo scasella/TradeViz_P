@@ -27,7 +27,7 @@ curPat = []
 matchedPat = []
 matchedEndInd = []
 extraArr = []
-futureFinal = []
+futureAverages = []
 toExtra = []
 
 curCollect = []
@@ -120,7 +120,7 @@ def collectPats():
                     tempPat.append(temp)
                 tempCollect.append(tempPat)
                 tempEnd.append(sIndex+patLen)
-            sIndex += (patLen/2)
+            sIndex += (patLen)
         patCollect.append(tempCollect)
         endingInd.append(tempEnd)
 
@@ -166,8 +166,8 @@ def matchPats():
 
 def plotting(toOutput):
     global curPat
-    global futureFinal
-    futureFinal = []
+    global futureAverages
+    futureAverages = []
     global matchedPat
     global futureE
     global toExtra
@@ -185,9 +185,6 @@ def plotting(toOutput):
                 change = percentChange(priceArr[col][endInd[1]],x)
                 tempPercent.append(change)
             futurePercent.append(tempPercent)
-
-
-        futureAverages = []
 
         for arrItemNum in range(len(futurePercent[0])):
                 tempOutcomes = []
@@ -226,7 +223,7 @@ def runGo(ticker,selection):
 
         curCollect.append(curPat)
         matchedCollect.append(matchedPat)
-        futureCollect.append(futureFinal)
+        futureCollect.append(futureAverages)
         extraCollect.append(toExtra)
     except (RuntimeError, TypeError, NameError):
         matchedCollect.append(['error'])
