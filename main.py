@@ -9,7 +9,6 @@ from sys import argv
 import matplotlib
 import numpy as np
 np.seterr(divide='ignore', invalid='ignore')
-import matplotlib.pyplot as plt
 import urllib
 import math
 
@@ -187,11 +186,7 @@ def plotting(toOutput):
                 change = percentChange(priceArr[col][endInd[1]],x)
                 tempPercent.append(change)
             futurePercent.append(tempPercent)
-            if toOutput == False:
-                xp = []
-                for y in range(1,(len(i)+1)):
-                    xp.append(y)
-                plt.plot(xp, i, linewidth = 0.5)
+
 
         futureAverages = []
 
@@ -201,21 +196,6 @@ def plotting(toOutput):
                     tempOutcomes.append(arr[arrItemNum])
                 futureAverages.append(np.mean(tempOutcomes))
                 toExtra.append([futureAverages[-1],np.std(tempOutcomes)])
-
-        if toOutput == False:
-
-            xp = []
-            for y in range(patLen,(patLen+patLen)):
-                xp.append(y)
-            plt.plot(xp, futureAverages, linewidth = 0.5)
-            plt.axvline(x=patLen,linewidth=1.0)
-
-            xq = []
-            for i in range(1,(len(curPat)+1)):
-                xq.append(i)
-            plt.plot(xq, curPat, c='#54fff7', linewidth=1.5)
-            plt.grid(True)
-            plt.show()
 
 
 def run(ticker,selection):
