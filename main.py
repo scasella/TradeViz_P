@@ -250,7 +250,7 @@ def enable_cors():
 def main(tickerSubmit, numSelect):
     #try:
     #    try:
-    runGo(tickerSubmit,numSelect)
+    runGo(str(tickerSubmit),int(numSelect))
     #    except:
     #        raise ValueError
 
