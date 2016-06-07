@@ -267,14 +267,13 @@ def enable_cors():
     response.headers['Access-Control-Allow-Methods'] = _allow_methods
     response.headers['Access-Control-Allow-Headers'] = _allow_headers
 
-@get('/')
-def main():
+@get('/<tickerSubmit>')
+def main(tickerSubmit):
     try:
         try:
-            data = request.json()
-            run(data,1)
-            run(data,2)
-            run(data,3)
+            run(tickerSubmit,1)
+            run(tickerSubmit,2)
+            run(tickerSubmit,3)
         except:
             raise ValueError
 
