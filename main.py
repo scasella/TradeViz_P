@@ -197,7 +197,7 @@ def plotting(toOutput):
                 toExtra.append([futureAverages[-1],np.std(tempOutcomes)])
 
 
-def run(ticker,selection):
+def runGo(ticker,selection):
     global curPat
     global matchedPat
     global finalFuture
@@ -250,9 +250,9 @@ def enable_cors():
 def main(tickerSubmit):
     try:
         try:
-            run(tickerSubmit,1)
-            run(tickerSubmit,2)
-            run(tickerSubmit,3)
+            runGo(tickerSubmit,1)
+            runGo(tickerSubmit,2)
+            runGo(tickerSubmit,3)
         except:
             raise ValueError
 
@@ -271,4 +271,4 @@ def main(tickerSubmit):
     #return 'hello world'
     return json.dumps({'matches': matchedCollect,'current': curCollect,'future': futureCollect, 'extra': extraCollect})
 
-run(port=argv[1])
+run(host='0.0.0.0', port=argv[1])
