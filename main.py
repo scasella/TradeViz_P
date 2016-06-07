@@ -251,8 +251,6 @@ def main(tickerSubmit, numSelect):
     try:
         try:
             runGo(tickerSubmit,numSelect)
-            runGo(tickerSubmit,numSelect)
-            runGo(tickerSubmit,numSelect)
         except:
             raise ValueError
 
@@ -265,7 +263,7 @@ def main(tickerSubmit, numSelect):
         return
 
     response.headers['Content-Type'] = 'application/json'
-    #return 'hello world'
-    return json.dumps({'matches': matchedCollect,'current': curCollect,'future': futureCollect, 'extra': extraCollect})
+    return 'hello world'
+    #return json.dumps({'matches': matchedCollect,'current': curCollect,'future': futureCollect, 'extra': extraCollect})
 
 run(host='0.0.0.0', port=argv[1])
