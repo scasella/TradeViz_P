@@ -6,7 +6,6 @@ import os
 from os import environ as env
 from sys import argv
 
-import matplotlib
 import numpy as np
 np.seterr(divide='ignore', invalid='ignore')
 import urllib
