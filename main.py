@@ -26,15 +26,10 @@ futureE = 24
 curPat = []
 matchedPat = []
 matchedEndInd = []
-extraArr = []
 futureAverages = []
 toExtra = []
 
-curCollect = []
-matchedCollect = []
-futureCollect = []
-extraCollect = []
-
+totalDict = {}
 
 def percentChange(startPoint,currentPoint):
     for i in range(1000):
@@ -148,14 +143,6 @@ def matchPats():
             for ind,item in enumerate(row):
                 mseTemp = abs(curPat[ind] - item)
                 mseCollect.append(mseTemp)
-            weighting = []
-            incr = 0
-            for i in mseCollect:
-                if incr > len(mseCollect)/2:
-                    weighting.append(math.sqrt(i))
-                else:
-                    weighting.append(i)
-                incr += 1
             #mseAvg = np.average(weighting)
             mseAvg = np.average(mseCollect)
             bestMatches.append(([row,colInd,endingInd[colInd][rowInd]],mseAvg))
@@ -164,11 +151,8 @@ def matchPats():
         matchedPat.append(item[0][0])
         matchedEndInd.append((item[0][1],item[0][2]))
 
-def plotting(toOutput):
-    global curPat
+def plotting(isPlotting):
     global futureAverages
-    futureAverages = []
-    global matchedPat
     global futureE
     global toExtra
     futureLine = []
@@ -195,11 +179,16 @@ def plotting(toOutput):
 
 
 def runGo(ticker,selection):
+    global priceArr
+    global patCollect
+    global endingInd
+    global matchedEndInd
     global curPat
     global matchedPat
-    global finalFuture
+    global futureAverages
     global toExtra
     global patLen
+    global totalDict
     if selection == 1:
         yahooLoad([ticker,'GOOGL','AMZN','NFLX','MSFT','ORCL','MCD','KO',
                    'AGN','T','VZ','APA','XOM'])#'M','MA','BAC','JPM','GS','NKE',
@@ -219,21 +208,19 @@ def runGo(ticker,selection):
         currentPat(0)
         collectPats()
         matchPats()
-        plotting(True)
-
-        curCollect.append(curPat)
-        matchedCollect.append(matchedPat)
-        futureCollect.append(futureAverages)
-        extraCollect.append(toExtra)
+        plotting(False)
+        totalDict = {'matches': matchedPat,'current': curPat,'future': futureAverages, 'extra': toExtra}
     except (RuntimeError, TypeError, NameError):
-        matchedCollect.append(['error'])
-        futureCollect.append(['error'])
-        extraCollect.append(['error'])
-        curCollect.append(['error'])
+        totalDict = {'error':'error','error':'error','error':'error','error':'error'}
 
-
-
-
+    priceArr = []
+    patCollect = []
+    endingInd = []
+    matchedEndInd = []
+    curPat = []
+    matchedPat = []
+    futureAverages = []
+    toExtra = []
 
 @hook('after_request')
 def enable_cors():
@@ -261,6 +248,6 @@ def main(tickerSubmit, numSelect):
 
     response.headers['Content-Type'] = 'application/json'
     #return 'hello world'
-    return json.dumps({'matches': matchedCollect,'current': curCollect,'future': futureCollect, 'extra': extraCollect})
+    return json.dumps(totalDict)
 
 run(host='0.0.0.0', port=argv[1])
