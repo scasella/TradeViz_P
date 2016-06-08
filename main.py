@@ -8,7 +8,8 @@ from sys import argv
 
 import numpy as np
 np.seterr(divide='ignore', invalid='ignore')
-import urllib
+import urllib2
+from multiprocessing.dummy import Pool as ThreadPool 
 import math
 
 import json
