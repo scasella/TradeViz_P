@@ -59,23 +59,22 @@ def loadQuote(tickerArr,interval):
         tempArr = np.array(tempArr, dtype=float)
         priceArr.append(tempArr[:-100])
 
-def yahooLoad(tickerArr):
+def yahooLoad(val):
     global priceArr
     priceArr = []
-    for val in tickerArr:
-        tempArr = []
-        string = ""
-        if len(val) < 6:
-            string = 'http://ichart.finance.yahoo.com/table.csv?s={0}'.format(val)
+    tempArr = []
+    string = ""
+    string = 'http://ichart.finance.yahoo.com/table.csv?s={0}'.format(val)
 
-            csv = urllib.urlopen(string).readlines()
-            for bar in xrange(1,min(len(csv),500)):
-                close = csv[bar].split(',')[6]
-                close = float(close)
-                tempArr.append(close)
-        tempArr = tempArr[::-1]
-        tempArr = np.array(tempArr, dtype=float)
-        priceArr.append(tempArr)
+    csv = urllib2.urlopen(string).readlines()
+    #for bar in xrange(1,min(len(csv),500)):
+    for bar in xrange(1,len(csv)):
+        close = csv[bar].split(',')[6]
+        close = float(close)
+        tempArr.append(close)
+    tempArr = tempArr[::-1]
+    tempArr = np.array(tempArr, dtype=float)
+    priceArr.append(tempArr)
 
 def currentPat(tickerCol):
     global curPat
@@ -189,9 +188,17 @@ def runGo(ticker,selection):
     global patLen
     global totalDict
     if selection == 1:
-        yahooLoad([ticker,'GOOGL','AMZN','NFLX','MSFT','ORCL','MCD','KO',
-                   'AGN','T','VZ','APA','XOM','M','MA','BAC','JPM','GS','NKE',
-                   'JCP','HES','COP','JNJ','SBUX','F','GE','ABBV'])
+        arr = [ticker,'GOOGL','AMZN','NFLX','MSFT','ORCL','MCD','KO',
+                   'AGN','T','VZ','APA','XOM','M','MA','BAC','JPM','GS','NKE']
+                   #'JCP','HES','COP','JNJ','SBUX','F','GE','ABBV'])
+        # Make the Pool of workers
+        pool = ThreadPool(4)
+        # Open the urls in their own threads
+        # and return the results
+        results = pool.map(yahooLoad, arr)
+        #close the pool and wait for the work to finish
+        pool.close()
+        pool.join()
         patLen = 10
     elif selection == 2:
         loadQuote([ticker,'EURUSD','GOOGL','AMZN','USDJPY','NFLX','MSFT','ORCL','MCD','KO',
