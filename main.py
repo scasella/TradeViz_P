@@ -32,13 +32,12 @@ toExtra = []
 totalDict = {}
 
 def percentChange(startPoint,currentPoint):
-    for i in range(1000):
-        try:
-            x = ((float(currentPoint)-startPoint)/abs(startPoint))
-            return x
-        except:
-            print(currentPoint, startPoint)
-            return 0.00000000001
+    try:
+        x = ((float(currentPoint)-startPoint)/abs(startPoint))
+        return x
+    except:
+        print(currentPoint, startPoint)
+        return 0.00000000001
 
 def loadQuote(tickerArr,interval):
     global priceArr
@@ -70,7 +69,7 @@ def yahooLoad(tickerArr):
             string = 'http://ichart.finance.yahoo.com/table.csv?s={0}'.format(val)
 
             csv = urllib.urlopen(string).readlines()
-            for bar in xrange(1,1250):
+            for bar in xrange(1,min(len(csv),500)):
                 close = csv[bar].split(',')[6]
                 close = float(close)
                 tempArr.append(close)
@@ -147,7 +146,7 @@ def matchPats():
             mseAvg = np.average(mseCollect)
             bestMatches.append(([row,colInd,endingInd[colInd][rowInd]],mseAvg))
     test = sortPats(bestMatches)
-    for item in test[:30]:
+    for item in test[:15]:
         matchedPat.append(item[0][0])
         matchedEndInd.append((item[0][1],item[0][2]))
 
