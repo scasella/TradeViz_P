@@ -70,7 +70,7 @@ def yahooLoad(tickerArr):
             string = 'http://ichart.finance.yahoo.com/table.csv?s={0}'.format(val)
 
             csv = urllib.urlopen(string).readlines()
-            for bar in xrange(1,len(csv)):
+            for bar in xrange(1,1250):
                 close = csv[bar].split(',')[6]
                 close = float(close)
                 tempArr.append(close)
@@ -147,7 +147,7 @@ def matchPats():
             mseAvg = np.average(mseCollect)
             bestMatches.append(([row,colInd,endingInd[colInd][rowInd]],mseAvg))
     test = sortPats(bestMatches)
-    for item in test[:10]:
+    for item in test[:30]:
         matchedPat.append(item[0][0])
         matchedEndInd.append((item[0][1],item[0][2]))
 
@@ -191,8 +191,8 @@ def runGo(ticker,selection):
     global totalDict
     if selection == 1:
         yahooLoad([ticker,'GOOGL','AMZN','NFLX','MSFT','ORCL','MCD','KO',
-                   'AGN','T','VZ','APA','XOM'])#'M','MA','BAC','JPM','GS','NKE',
-                   #'JCP','HES','COP','JNJ','SBUX','F','GE','ABBV'])
+                   'AGN','T','VZ','APA','XOM','M','MA','BAC','JPM','GS','NKE',
+                   'JCP','HES','COP','JNJ','SBUX','F','GE','ABBV'])
         patLen = 10
     elif selection == 2:
         loadQuote([ticker,'EURUSD','GOOGL','AMZN','USDJPY','NFLX','MSFT','ORCL','MCD','KO',
