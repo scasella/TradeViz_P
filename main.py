@@ -29,6 +29,7 @@ matchedPat = []
 matchedEndInd = []
 futureAverages = []
 toExtra = []
+interval = 3600
 
 totalDict = {}
 
@@ -40,7 +41,8 @@ def percentChange(startPoint,currentPoint):
         print(currentPoint, startPoint)
         return 0.00000000001
 
-def loadQuote(val,interval):
+def loadQuote(val):
+    global interval
     global priceArr
     priceArr = []
     tempArr = []
@@ -187,6 +189,7 @@ def runGo(ticker,selection):
     global toExtra
     global patLen
     global totalDict
+    global interval
     if selection == 1:
         arr = [ticker,'GOOGL','AMZN','NFLX','MSFT','ORCL','MCD','KO',
                    'AGN','T','VZ','APA','XOM','M','MA','BAC','JPM','GS','NKE']
@@ -204,15 +207,11 @@ def runGo(ticker,selection):
         arr = [ticker,'EURUSD','GOOGL','AMZN','USDJPY','NFLX','MSFT','ORCL','MCD','KO',
                    'AGN','T','VZ','APA','XOM','M','MA','BAC','JPM','GS','NKE','AUDJPY','GBPUSD',
                    'JCP','HES','COP','JNJ','SBUX','F','GE','ABBV']
-
-        iterNum = []
-        for i in arr:
-            iterNum.append(3600)
-
+        interval = 3600
         pool = ThreadPool(4)
         # Open the urls in their own threads
         # and return the results
-        results = pool.map(loadQuote,arr,iterNum)
+        results = pool.map(loadQuote,arr)
         #close the pool and wait for the work to finish
         pool.close()
         pool.join()
@@ -221,15 +220,11 @@ def runGo(ticker,selection):
         arr = [ticker,'EURUSD','GOOGL','AMZN','USDJPY','NFLX','MSFT','ORCL','MCD','KO',
                    'AGN','T','VZ','APA','XOM','M','MA','BAC','JPM','GS','NKE','AUDJPY','GBPUSD',
                    'JCP','HES','COP','JNJ','SBUX','F','GE','ABBV']
-
-        iterNum = []
-        for i in arr:
-            iterNum.append(900)
-            
+        interval = 900
         pool = ThreadPool(4)
         # Open the urls in their own threads
         # and return the results
-        results = pool.map(loadQuote,arr,iterNum)
+        results = pool.map(loadQuote,arr)
         #close the pool and wait for the work to finish
         pool.close()
         pool.join()
