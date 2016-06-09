@@ -9,7 +9,7 @@ from sys import argv
 import numpy as np
 np.seterr(divide='ignore', invalid='ignore')
 import urllib2
-from multiprocessing.dummy import Pool as ThreadPool 
+from multiprocessing.dummy import Pool as ThreadPool
 import math
 
 import json
@@ -46,7 +46,7 @@ def loadQuote(tickerArr,interval):
     for i in tickerArr:
         tempArr = []
         string = 'https://www.google.com/finance/getprices?q={0}&i={1}&p=200d&f=d,c,v'.format(i,interval)
-        csv = urllib.urlopen(string).readlines()
+        csv = urllib2.urlopen(string).readlines()
         for bar in xrange(8,len(csv)):
             if csv[bar].count(',')!=2: continue
             offset,close,volume = csv[bar].split(',')
