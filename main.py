@@ -40,25 +40,24 @@ def percentChange(startPoint,currentPoint):
         print(currentPoint, startPoint)
         return 0.00000000001
 
-def loadQuote(tickerArr,interval):
+def loadQuote(val,interval):
     global priceArr
     priceArr = []
-    for i in tickerArr:
-        tempArr = []
-        string = 'https://www.google.com/finance/getprices?q={0}&i={1}&p=200d&f=d,c,v'.format(i,interval)
-        csv = urllib2.urlopen(string).readlines()
-        for bar in xrange(8,len(csv)):
-            if csv[bar].count(',')!=2: continue
-            offset,close,volume = csv[bar].split(',')
-            if offset[0]=='a':
-                day = float(offset[1:])
-                offset = 0
-            else:
-                offset = float(offset)
-                offset,close,volume = [float(x) for x in [offset,close,volume]]
-                tempArr.append(close)
-        tempArr = np.array(tempArr, dtype=float)
-        priceArr.append(tempArr[:-100])
+    tempArr = []
+    string = 'https://www.google.com/finance/getprices?q={0}&i={1}&p=200d&f=d,c,v'.format(val,interval)
+    csv = urllib2.urlopen(string).readlines()
+    for bar in xrange(8,len(csv)):
+        if csv[bar].count(',')!=2: continue
+        offset,close,volume = csv[bar].split(',')
+        if offset[0]=='a':
+            day = float(offset[1:])
+            offset = 0
+        else:
+            offset = float(offset)
+            offset,close,volume = [float(x) for x in [offset,close,volume]]
+            tempArr.append(close)
+    tempArr = np.array(tempArr, dtype=float)
+    priceArr.append(tempArr[:-(patLen+futureE)])
 
 def yahooLoad(val):
     global priceArr
@@ -75,7 +74,7 @@ def yahooLoad(val):
         tempArr.append(close)
     tempArr = tempArr[::-1]
     tempArr = np.array(tempArr, dtype=float)
-    priceArr.append(tempArr)
+    priceArr.append(tempArr[:-(patLen+futureE)])
 
 def currentPat(tickerCol):
     global curPat
@@ -202,14 +201,28 @@ def runGo(ticker,selection):
         pool.join()
         patLen = 10
     elif selection == 2:
-        loadQuote([ticker,'EURUSD','GOOGL','AMZN','USDJPY','NFLX','MSFT','ORCL','MCD','KO',
+        arr = [ticker,'EURUSD','GOOGL','AMZN','USDJPY','NFLX','MSFT','ORCL','MCD','KO',
                    'AGN','T','VZ','APA','XOM','M','MA','BAC','JPM','GS','NKE','AUDJPY','GBPUSD',
-                   'JCP','HES','COP','JNJ','SBUX','F','GE','ABBV'],3600)
+                   'JCP','HES','COP','JNJ','SBUX','F','GE','ABBV']
+        pool = ThreadPool(4)
+        # Open the urls in their own threads
+        # and return the results
+        results = pool.map(loadQuote,arr,3600)
+        #close the pool and wait for the work to finish
+        pool.close()
+        pool.join()
         patLen = 24
     elif selection == 3:
-        loadQuote([ticker,'EURUSD','GOOGL','AMZN','USDJPY','NFLX','MSFT','ORCL','MCD','KO',
+        arr = [ticker,'EURUSD','GOOGL','AMZN','USDJPY','NFLX','MSFT','ORCL','MCD','KO',
                    'AGN','T','VZ','APA','XOM','M','MA','BAC','JPM','GS','NKE','AUDJPY','GBPUSD',
-                   'JCP','HES','COP','JNJ','SBUX','F','GE','ABBV'],900)
+                   'JCP','HES','COP','JNJ','SBUX','F','GE','ABBV']
+        pool = ThreadPool(4)
+        # Open the urls in their own threads
+        # and return the results
+        results = pool.map(loadQuote,arr,900)
+        #close the pool and wait for the work to finish
+        pool.close()
+        pool.join()
         patLen = 24
     try:
         currentPat(0)
