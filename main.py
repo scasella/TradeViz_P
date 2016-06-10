@@ -147,7 +147,7 @@ def matchPats():
             mseAvg = np.average(mseCollect)
             bestMatches.append(([row,colInd,endingInd[colInd][rowInd]],mseAvg))
     test = sortPats(bestMatches)
-    for item in test[:15]:
+    for item in test[:10]:
         matchedPat.append(item[0][0])
         matchedEndInd.append((item[0][1],item[0][2]))
 
