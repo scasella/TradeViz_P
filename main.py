@@ -28,7 +28,7 @@ curPat = []
 matchedPat = []
 matchedEndInd = []
 futureAverages = []
-toExtra = []
+stDev = []
 interval = 3600
 
 totalDict = {}
@@ -154,7 +154,7 @@ def matchPats():
 def plotting(isPlotting):
     global futureAverages
     global futureE
-    global toExtra
+    global stDev
     futureLine = []
     futurePercent = []
     if len(matchedPat) > 1:
@@ -175,8 +175,8 @@ def plotting(isPlotting):
                 for arr in futurePercent:
                     tempOutcomes.append(arr[arrItemNum])
                 futureAverages.append(np.mean(tempOutcomes))
-                toExtra.append(np.std(tempOutcomes))
-        toExtra.append(futureAverages[-1])
+                stDev.append(np.std(tempOutcomes))
+
 
 
 def runGo(ticker,selection):
@@ -187,7 +187,7 @@ def runGo(ticker,selection):
     global curPat
     global matchedPat
     global futureAverages
-    global toExtra
+    global stDev
     global patLen
     global totalDict
     global interval
@@ -235,7 +235,7 @@ def runGo(ticker,selection):
         collectPats()
         matchPats()
         plotting(False)
-        totalDict = {'matches': matchedPat,'current': curPat,'future': futureAverages, 'extra': toExtra}
+        totalDict = {'matches': matchedPat,'current': curPat,'future': futureAverages, 'stDev': stDev}
     except (RuntimeError, TypeError, NameError):
         totalDict = {'error':'error','error':'error','error':'error','error':'error'}
 
@@ -246,7 +246,7 @@ def runGo(ticker,selection):
     curPat = []
     matchedPat = []
     futureAverages = []
-    toExtra = []
+    stDev = []
 
 @hook('after_request')
 def enable_cors():
