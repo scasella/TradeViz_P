@@ -175,7 +175,8 @@ def plotting(isPlotting):
                 for arr in futurePercent:
                     tempOutcomes.append(arr[arrItemNum])
                 futureAverages.append(np.mean(tempOutcomes))
-                toExtra.append([futureAverages[-1],np.std(tempOutcomes)])
+                toExtra.append(np.std(tempOutcomes))
+        toExtra.append(futureAverages[-1])
 
 
 def runGo(ticker,selection):
