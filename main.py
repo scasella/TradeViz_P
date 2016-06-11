@@ -60,7 +60,7 @@ def loadQuote(val):
                 offset,close,volume = [float(x) for x in [offset,close,volume]]
                 tempArr.append(close)
         tempArr = np.array(tempArr, dtype=float)
-        priceArr.append(tempArr[:-(patLen+futureE)])
+        priceArr.append(tempArr)
     except:
         print()
 
@@ -79,7 +79,7 @@ def yahooLoad(val):
             tempArr.append(close)
         tempArr = tempArr[::-1]
         tempArr = np.array(tempArr, dtype=float)
-        priceArr.append(tempArr[:-(patLen+futureE)])
+        priceArr.append(tempArr)
     except:
         print()
 
@@ -87,10 +87,10 @@ def currentPat(tickerCol):
     global curPat
     global patLen
     curPat = []
-    sliceLen = patLen+1
+    sliceLen = patLen
     curr = priceArr[tickerCol][-sliceLen:]
-    while curr[2] == curr[4]:
-        sliceLen += patLen
+    while curr[-2] == curr[-1]:
+        sliceLen += 1
         curr = priceArr[tickerCol][-sliceLen:]
     i = 0
     while i < patLen:
@@ -181,8 +181,6 @@ def plotting(isPlotting):
                     tempOutcomes.append(arr[arrItemNum])
                 futureAverages.append(np.mean(tempOutcomes))
                 stDev.append(np.std(tempOutcomes))
-
-
 
 def runGo(ticker,selection):
     global priceArr
