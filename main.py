@@ -108,26 +108,25 @@ def collectPats(tickerCol):
     patCollect = []
     endingInd = []
     for each in priceArr:
-        if priceArr.index(each) != tickerCol:
-            tempCollect = []
-            tempEnd = []
-            sIndex = 0
-            length = (len(each) - patLen - futureE)
+        tempCollect = []
+        tempEnd = []
+        sIndex = 0
+        length = (len(each) - patLen - futureE)
 
-            while sIndex < length:
-                inc = 1
-                tempPat = []
+        while sIndex < length:
+            inc = 1
+            tempPat = []
 
-                if percentChange(each[sIndex+patLen*0.75],each[sIndex+patLen]) > 0.0001 and percentChange(each[sIndex+patLen*0.25],each[sIndex+patLen]) > 0.0001 and percentChange(each[sIndex+patLen*0.50],each[sIndex+patLen]) > 0.0001:
-                    while inc <= patLen:
-                        temp = percentChange(each[sIndex + inc -1], each[sIndex + inc])
-                        inc += 1
-                        tempPat.append(temp)
-                    tempCollect.append(tempPat)
-                    tempEnd.append(sIndex+patLen)
-                sIndex += (patLen)
-            patCollect.append(tempCollect)
-            endingInd.append(tempEnd)
+            if percentChange(each[sIndex+patLen*0.75],each[sIndex+patLen]) > 0.0001 and percentChange(each[sIndex+patLen*0.25],each[sIndex+patLen]) > 0.0001 and percentChange(each[sIndex+patLen*0.50],each[sIndex+patLen]) > 0.0001:
+                while inc <= patLen:
+                    temp = percentChange(each[sIndex + inc -1], each[sIndex + inc])
+                    inc += 1
+                    tempPat.append(temp)
+                tempCollect.append(tempPat)
+                tempEnd.append(sIndex+patLen)
+            sIndex += (patLen)
+        patCollect.append(tempCollect)
+        endingInd.append(tempEnd)
 
 
 def sortPats(array):
