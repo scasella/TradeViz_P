@@ -88,7 +88,7 @@ def currentPat(tickerCol):
     global patLen
     curPat = []
     sliceLen = patLen
-    curr = priceArr[tickerCol][-sliceLen:]
+    curr = priceArr[tickerCol][-(sliceLen+1):]
     while curr[-2] == curr[-1]:
         sliceLen += 1
         curr = priceArr[tickerCol][-sliceLen:]
