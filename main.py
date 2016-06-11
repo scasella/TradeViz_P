@@ -5,6 +5,7 @@ from bottle import post, get, put, delete
 import os
 from os import environ as env
 from sys import argv
+import sys
 
 import numpy as np
 np.seterr(divide='ignore', invalid='ignore')
@@ -276,6 +277,6 @@ def main(tickerSubmit, numSelect):
 
     response.headers['Content-Type'] = 'application/json'
     #return 'hello world'
-    return json.dumps(totalDict)
+    return json.dumps(totalDict), sys.modules[__name__].__dict__.clear()
 
 run(host='0.0.0.0', port=argv[1])
