@@ -45,6 +45,7 @@ def percentChange(startPoint,currentPoint):
 def loadQuote(val):
     global interval
     global priceArr
+    global theInd
     tempArr = []
     string = 'https://www.google.com/finance/getprices?q={0}&i={1}&p=200d&f=d,c,v'.format(val,interval)
     try:
@@ -61,6 +62,8 @@ def loadQuote(val):
                 tempArr.append(close)
         tempArr = np.array(tempArr, dtype=float)
         priceArr.append(tempArr)
+        if val == theInd:
+            theInd = priceArr.index(tempArr)
     except:
         print()
 
@@ -83,7 +86,6 @@ def yahooLoad(val):
         priceArr.append(tempArr)
         if val == theInd:
             theInd = priceArr.index(tempArr)
-            print(theInd)
     except:
         print()
 
@@ -207,6 +209,7 @@ def runGo(ticker,selection):
                        'JCP','HES','COP','JNJ','SBUX','F','GE','ABBV','WFC','SLB',
                        'GILD','MO','GE','V','WMT','PEP','QCOM']
             theInd = ticker
+            patLen = 10
             # Make the Pool of workers
             pool = ThreadPool(4)
             # Open the urls in their own threads
@@ -215,13 +218,13 @@ def runGo(ticker,selection):
             #close the pool and wait for the work to finish
             pool.close()
             pool.join()
-            patLen = 10
         elif selection == 2:
             arr = [ticker,'EURUSD','GOOGL','AMZN','USDJPY','NFLX','MSFT','ORCL','MCD','KO',
                        'AGN','T','VZ','APA','XOM','M','MA','BAC','JPM','GS','NKE','AUDJPY','GBPUSD',
                        'JCP','HES','COP','JNJ','SBUX','F','GE','ABBV']
             theInd = ticker
             interval = 3600
+            patLen = 24
             pool = ThreadPool(4)
             # Open the urls in their own threads
             # and return the results
@@ -229,13 +232,14 @@ def runGo(ticker,selection):
             #close the pool and wait for the work to finish
             pool.close()
             pool.join()
-            patLen = 24
+
         elif selection == 3:
             arr = [ticker,'EURUSD','GOOGL','AMZN','USDJPY','NFLX','MSFT','ORCL','MCD','KO',
                        'AGN','T','VZ','APA','XOM','M','MA','BAC','JPM','GS','NKE','AUDJPY','GBPUSD',
                        'JCP','HES','COP','JNJ','SBUX','F','GE','ABBV']
             theInd = ticker
             interval = 900
+            patLen = 24
             pool = ThreadPool(4)
             # Open the urls in their own threads
             # and return the results
@@ -243,7 +247,6 @@ def runGo(ticker,selection):
             #close the pool and wait for the work to finish
             pool.close()
             pool.join()
-            patLen = 24
 
         currentPat(theInd)
         collectPats(theInd)
