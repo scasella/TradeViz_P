@@ -5,7 +5,6 @@ from bottle import post, get, put, delete
 import os
 from os import environ as env
 from sys import argv
-import sys
 
 import numpy as np
 np.seterr(divide='ignore', invalid='ignore')
@@ -44,40 +43,43 @@ def percentChange(startPoint,currentPoint):
 
 def loadQuote(val):
     global interval
-    global priceArr
-    priceArr = []
     tempArr = []
     string = 'https://www.google.com/finance/getprices?q={0}&i={1}&p=200d&f=d,c,v'.format(val,interval)
-    csv = urllib2.urlopen(string).readlines()
-    for bar in xrange(8,len(csv)):
-        if csv[bar].count(',')!=2: continue
-        offset,close,volume = csv[bar].split(',')
-        if offset[0]=='a':
-            day = float(offset[1:])
-            offset = 0
-        else:
-            offset = float(offset)
-            offset,close,volume = [float(x) for x in [offset,close,volume]]
-            tempArr.append(close)
-    tempArr = np.array(tempArr, dtype=float)
-    priceArr.append(tempArr[:-(patLen+futureE)])
+
+    try:
+        csv = urllib2.urlopen(string).readlines()
+        for bar in xrange(8,len(csv)):
+            if csv[bar].count(',')!=2: continue
+            offset,close,volume = csv[bar].split(',')
+            if offset[0]=='a':
+                day = float(offset[1:])
+                offset = 0
+            else:
+                offset = float(offset)
+                offset,close,volume = [float(x) for x in [offset,close,volume]]
+                tempArr.append(close)
+        tempArr = np.array(tempArr, dtype=float)
+        priceArr.append(tempArr[:-(patLen+futureE)])
+    except:
+        print()
 
 def yahooLoad(val):
-    global priceArr
-    priceArr = []
     tempArr = []
     string = ""
     string = 'http://ichart.finance.yahoo.com/table.csv?s={0}'.format(val)
 
-    csv = urllib2.urlopen(string).readlines()
-    #for bar in xrange(1,min(len(csv),500)):
-    for bar in xrange(1,len(csv)):
-        close = csv[bar].split(',')[6]
-        close = float(close)
-        tempArr.append(close)
-    tempArr = tempArr[::-1]
-    tempArr = np.array(tempArr, dtype=float)
-    priceArr.append(tempArr[:-(patLen+futureE)])
+    try:
+        csv = urllib2.urlopen(string).readlines()
+        #for bar in xrange(1,min(len(csv),500)):
+        for bar in xrange(1,len(csv)):
+            close = csv[bar].split(',')[6]
+            close = float(close)
+            tempArr.append(close)
+        tempArr = tempArr[::-1]
+        tempArr = np.array(tempArr, dtype=float)
+        priceArr.append(tempArr[:-(patLen+futureE)])
+    except:
+        print()
 
 def currentPat(tickerCol):
     global curPat
@@ -277,6 +279,6 @@ def main(tickerSubmit, numSelect):
 
     response.headers['Content-Type'] = 'application/json'
     #return 'hello world'
-    return json.dumps(totalDict), sys.modules[__name__].__dict__.clear()
+    return json.dumps(totalDict)
 
 run(host='0.0.0.0', port=argv[1])
