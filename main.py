@@ -30,8 +30,8 @@ matchedEndInd = []
 futureAverages = []
 stDev = []
 interval = 3600
-
-theInd = 0
+gTicker = ""
+theInd = 7
 totalDict = {}
 
 def percentChange(startPoint,currentPoint):
@@ -46,30 +46,25 @@ def loadQuote(val):
     global interval
     global priceArr
     global theInd
+    global gTicker
     tempArr = []
+    string = ""
     string = 'https://www.google.com/finance/getprices?q={0}&i={1}&p=200d&f=d,c,v'.format(val,interval)
-    try:
-        csv = urllib2.urlopen(string).readlines()
-        for bar in xrange(8,len(csv)):
-            if csv[bar].count(',')!=2: continue
-            offset,close,volume = csv[bar].split(',')
-            if offset[0]=='a':
-                day = float(offset[1:])
-                offset = 0
-            else:
-                offset = float(offset)
-                offset,close,volume = [float(x) for x in [offset,close,volume]]
-                tempArr.append(close)
-        tempArr = np.array(tempArr, dtype=float)
-        priceArr.append(tempArr)
-        if val == theInd:
-            theInd = priceArr.index(tempArr)
-    except:
-        print()
+
+    csv = urllib2.urlopen(string).readlines()
+    for bar in xrange(8,len(csv)):
+        offset,close,volume = csv[bar].split(',')
+        if offset[0]!='a':
+            tempArr.append(float(close))
+    priceArr.append(tempArr)
+    if val == gTicker:
+        theInd = priceArr.index(tempArr)
+
 
 def yahooLoad(val):
     global priceArr
     global theInd
+    global gTicker
     tempArr = []
     string = ""
     string = 'http://ichart.finance.yahoo.com/table.csv?s={0}'.format(val)
@@ -84,8 +79,9 @@ def yahooLoad(val):
         tempArr = tempArr[::-1]
         tempArr = np.array(tempArr, dtype=float)
         priceArr.append(tempArr)
-        if val == theInd:
+        if val == gTicker:
             theInd = priceArr.index(tempArr)
+            print(theInd)
     except:
         print()
 
@@ -118,14 +114,12 @@ def collectPats(tickerCol):
         while sIndex < length:
             inc = 1
             tempPat = []
-
-            if percentChange(each[sIndex+patLen*0.75],each[sIndex+patLen]) > 0.0001 and percentChange(each[sIndex+patLen*0.25],each[sIndex+patLen]) > 0.0001 and percentChange(each[sIndex+patLen*0.50],each[sIndex+patLen]) > 0.0001:
-                while inc <= patLen:
-                    temp = percentChange(each[sIndex + inc -1], each[sIndex + inc])
-                    inc += 1
-                    tempPat.append(temp)
-                tempCollect.append(tempPat)
-                tempEnd.append(sIndex+patLen)
+            while inc <= patLen:
+                temp = percentChange(each[sIndex + inc -1], each[sIndex + inc])
+                inc += 1
+                tempPat.append(temp)
+            tempCollect.append(tempPat)
+            tempEnd.append(sIndex+patLen)
             sIndex += (patLen)
         patCollect.append(tempCollect)
         endingInd.append(tempEnd)
@@ -202,60 +196,62 @@ def runGo(ticker,selection):
     global totalDict
     global interval
     global theInd
-    try:
-        if selection == 1:
-            arr = [ticker,'GOOGL','AMZN','NFLX','MSFT','ORCL','MCD','KO',
-                       'AGN','T','VZ','APA','XOM','M','MA','BAC','JPM','GS','NKE',
-                       'JCP','HES','COP','JNJ','SBUX','F','GE','ABBV','WFC','SLB',
-                       'GILD','MO','GE','V','WMT','PEP','QCOM']
-            theInd = ticker
-            patLen = 10
-            # Make the Pool of workers
-            pool = ThreadPool(4)
-            # Open the urls in their own threads
-            # and return the results
-            results = pool.map(yahooLoad, arr)
-            #close the pool and wait for the work to finish
-            pool.close()
-            pool.join()
-        elif selection == 2:
-            arr = [ticker,'EURUSD','GOOGL','AMZN','USDJPY','NFLX','MSFT','ORCL','MCD','KO',
-                       'AGN','T','VZ','APA','XOM','M','MA','BAC','JPM','GS','NKE','AUDJPY','GBPUSD',
-                       'JCP','HES','COP','JNJ','SBUX','F','GE','ABBV']
-            theInd = ticker
-            interval = 3600
-            patLen = 24
-            pool = ThreadPool(4)
-            # Open the urls in their own threads
-            # and return the results
-            results = pool.map(loadQuote,arr)
-            #close the pool and wait for the work to finish
-            pool.close()
-            pool.join()
+    global gTicker
 
-        elif selection == 3:
-            arr = [ticker,'EURUSD','GOOGL','AMZN','USDJPY','NFLX','MSFT','ORCL','MCD','KO',
-                       'AGN','T','VZ','APA','XOM','M','MA','BAC','JPM','GS','NKE','AUDJPY','GBPUSD',
-                       'JCP','HES','COP','JNJ','SBUX','F','GE','ABBV']
-            theInd = ticker
-            interval = 900
-            patLen = 24
-            pool = ThreadPool(4)
-            # Open the urls in their own threads
-            # and return the results
-            results = pool.map(loadQuote,arr)
-            #close the pool and wait for the work to finish
-            pool.close()
-            pool.join()
+    gTicker = ticker
 
-        currentPat(theInd)
-        collectPats(theInd)
-        matchPats()
-        plotting(False)
-        totalDict = {'matches': matchedPat,'current': curPat,'future': futureAverages, 'stDev': stDev}
-    except (RuntimeError, TypeError, NameError):
-        totalDict = {'error':'error','error':'error','error':'error','error':'error'}
+    if selection == 1:
+        arr = [ticker,'GOOGL','AMZN','NFLX','MSFT','ORCL','MCD','KO',
+                   'AGN','T','VZ','APA','XOM','M','MA','BAC','JPM','GS','NKE',
+                   'JCP','HES','COP','JNJ','SBUX','F','GE','ABBV','WFC','SLB',
+                   'GILD','MO','GE','V','WMT','PEP','QCOM']
 
+        patLen = 10
+        # Make the Pool of workers
+        pool = ThreadPool(4)
+        # Open the urls in their own threads
+        # and return the results
+        results = pool.map(yahooLoad, arr)
+        #close the pool and wait for the work to finish
+        pool.close()
+        pool.join()
+    elif selection == 2:
+        arr = ['SPY','EURUSD','GOOGL','AMZN','USDJPY','NFLX','MSFT','ORCL','MCD','KO',
+                   'AGN','T','VZ','APA','XOM','M','MA','BAC','JPM','GS','NKE','AUDJPY','GBPUSD',
+                   'JCP','HES','COP','JNJ','SBUX','F','GE','ABBV']
+
+        interval = 3600
+        patLen = 24
+        pool = ThreadPool(4)
+        # Open the urls in their own threads
+        # and return the results
+        results = pool.map(loadQuote, arr)
+        #close the pool and wait for the work to finish
+        pool.close()
+        pool.join()
+
+    elif selection == 3:
+        arr = ['SPY','EURUSD','GOOGL','AMZN','USDJPY','NFLX','MSFT','ORCL','MCD','KO',
+                   'AGN','T','VZ','APA','XOM','M','MA','BAC','JPM','GS','NKE','AUDJPY','GBPUSD',
+                   'JCP','HES','COP','JNJ','SBUX','F','GE','ABBV']
+
+        interval = 900
+        patLen = 24
+        pool = ThreadPool(4)
+        # Open the urls in their own threads
+        # and return the results
+        results = pool.map(loadQuote, arr)
+        #close the pool and wait for the work to finish
+        pool.close()
+        pool.join()
+
+    currentPat(theInd)
+    collectPats(theInd)
+    matchPats()
+    plotting(False)
+    totalDict = {'matches': matchedPat,'current': curPat,'future': futureAverages, 'stDev': stDev}
+#except (RuntimeError, TypeError, NameError):
+     #   totalDict = {'error':'error','error':'error','error':'error','error':'error'}
     priceArr = []
     patCollect = []
     endingInd = []
@@ -264,7 +260,7 @@ def runGo(ticker,selection):
     matchedPat = []
     futureAverages = []
     stDev = []
-    theInd = 0
+    theInd = 7
 
 @hook('after_request')
 def enable_cors():
