@@ -194,8 +194,9 @@ def runGo(ticker,selection):
     try:
         if selection == 1:
             arr = [ticker,'GOOGL','AMZN','NFLX','MSFT','ORCL','MCD','KO',
-                       'AGN','T','VZ','APA','XOM','M','MA','BAC','JPM','GS','NKE']
-                       #'JCP','HES','COP','JNJ','SBUX','F','GE','ABBV'])
+                       'AGN','T','VZ','APA','XOM','M','MA','BAC','JPM','GS','NKE',
+                       'JCP','HES','COP','JNJ','SBUX','F','GE','ABBV','WFC','SLB',
+                       'GILD','MO','GE','V','WMT','PEP','QCOM'])
             # Make the Pool of workers
             pool = ThreadPool(4)
             # Open the urls in their own threads
