@@ -43,6 +43,7 @@ def percentChange(startPoint,currentPoint):
 
 def loadQuote(val):
     global interval
+    global priceArr
     tempArr = []
     string = 'https://www.google.com/finance/getprices?q={0}&i={1}&p=200d&f=d,c,v'.format(val,interval)
 
@@ -64,6 +65,7 @@ def loadQuote(val):
         print()
 
 def yahooLoad(val):
+    global priceArr
     tempArr = []
     string = ""
     string = 'http://ichart.finance.yahoo.com/table.csv?s={0}'.format(val)
