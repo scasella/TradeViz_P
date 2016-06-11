@@ -191,46 +191,47 @@ def runGo(ticker,selection):
     global patLen
     global totalDict
     global interval
-    if selection == 1:
-        arr = [ticker,'GOOGL','AMZN','NFLX','MSFT','ORCL','MCD','KO',
-                   'AGN','T','VZ','APA','XOM','M','MA','BAC','JPM','GS','NKE']
-                   #'JCP','HES','COP','JNJ','SBUX','F','GE','ABBV'])
-        # Make the Pool of workers
-        pool = ThreadPool(4)
-        # Open the urls in their own threads
-        # and return the results
-        results = pool.map(yahooLoad, arr)
-        #close the pool and wait for the work to finish
-        pool.close()
-        pool.join()
-        patLen = 10
-    elif selection == 2:
-        arr = [ticker,'EURUSD','GOOGL','AMZN','USDJPY','NFLX','MSFT','ORCL','MCD','KO',
-                   'AGN','T','VZ','APA','XOM','M','MA','BAC','JPM','GS','NKE','AUDJPY','GBPUSD',
-                   'JCP','HES','COP','JNJ','SBUX','F','GE','ABBV']
-        interval = 3600
-        pool = ThreadPool(4)
-        # Open the urls in their own threads
-        # and return the results
-        results = pool.map(loadQuote,arr)
-        #close the pool and wait for the work to finish
-        pool.close()
-        pool.join()
-        patLen = 24
-    elif selection == 3:
-        arr = [ticker,'EURUSD','GOOGL','AMZN','USDJPY','NFLX','MSFT','ORCL','MCD','KO',
-                   'AGN','T','VZ','APA','XOM','M','MA','BAC','JPM','GS','NKE','AUDJPY','GBPUSD',
-                   'JCP','HES','COP','JNJ','SBUX','F','GE','ABBV']
-        interval = 900
-        pool = ThreadPool(4)
-        # Open the urls in their own threads
-        # and return the results
-        results = pool.map(loadQuote,arr)
-        #close the pool and wait for the work to finish
-        pool.close()
-        pool.join()
-        patLen = 24
     try:
+        if selection == 1:
+            arr = [ticker,'GOOGL','AMZN','NFLX','MSFT','ORCL','MCD','KO',
+                       'AGN','T','VZ','APA','XOM','M','MA','BAC','JPM','GS','NKE']
+                       #'JCP','HES','COP','JNJ','SBUX','F','GE','ABBV'])
+            # Make the Pool of workers
+            pool = ThreadPool(4)
+            # Open the urls in their own threads
+            # and return the results
+            results = pool.map(yahooLoad, arr)
+            #close the pool and wait for the work to finish
+            pool.close()
+            pool.join()
+            patLen = 10
+        elif selection == 2:
+            arr = [ticker,'EURUSD','GOOGL','AMZN','USDJPY','NFLX','MSFT','ORCL','MCD','KO',
+                       'AGN','T','VZ','APA','XOM','M','MA','BAC','JPM','GS','NKE','AUDJPY','GBPUSD',
+                       'JCP','HES','COP','JNJ','SBUX','F','GE','ABBV']
+            interval = 3600
+            pool = ThreadPool(4)
+            # Open the urls in their own threads
+            # and return the results
+            results = pool.map(loadQuote,arr)
+            #close the pool and wait for the work to finish
+            pool.close()
+            pool.join()
+            patLen = 24
+        elif selection == 3:
+            arr = [ticker,'EURUSD','GOOGL','AMZN','USDJPY','NFLX','MSFT','ORCL','MCD','KO',
+                       'AGN','T','VZ','APA','XOM','M','MA','BAC','JPM','GS','NKE','AUDJPY','GBPUSD',
+                       'JCP','HES','COP','JNJ','SBUX','F','GE','ABBV']
+            interval = 900
+            pool = ThreadPool(4)
+            # Open the urls in their own threads
+            # and return the results
+            results = pool.map(loadQuote,arr)
+            #close the pool and wait for the work to finish
+            pool.close()
+            pool.join()
+            patLen = 24
+
         currentPat(0)
         collectPats()
         matchPats()
