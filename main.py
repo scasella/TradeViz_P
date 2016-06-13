@@ -215,7 +215,7 @@ def runGo(ticker,selection):
             pool.close()
             pool.join()
         elif selection == 2:
-            arr = ['SPY','EURUSD','GOOGL','AMZN','USDJPY','NFLX','MSFT','ORCL','MCD','KO',
+            arr = [ticker,'EURUSD','GOOGL','AMZN','USDJPY','NFLX','MSFT','ORCL','MCD','KO',
                        'AGN','T','VZ','APA','XOM','M','MA','BAC','JPM','GS','NKE','AUDJPY','GBPUSD',
                        'JCP','HES','COP','JNJ','SBUX','F','GE','ABBV']
 
@@ -230,7 +230,7 @@ def runGo(ticker,selection):
             pool.join()
 
         elif selection == 3:
-            arr = ['SPY','EURUSD','GOOGL','AMZN','USDJPY','NFLX','MSFT','ORCL','MCD','KO',
+            arr = [ticker,'EURUSD','GOOGL','AMZN','USDJPY','NFLX','MSFT','ORCL','MCD','KO',
                        'AGN','T','VZ','APA','XOM','M','MA','BAC','JPM','GS','NKE','AUDJPY','GBPUSD',
                        'JCP','HES','COP','JNJ','SBUX','F','GE','ABBV']
 
