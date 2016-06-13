@@ -69,20 +69,16 @@ def yahooLoad(val):
     string = ""
     string = 'http://ichart.finance.yahoo.com/table.csv?s={0}'.format(val)
 
-    try:
-        csv = urllib2.urlopen(string).readlines()
-        #for bar in xrange(1,min(len(csv),500)):
-        for bar in xrange(1,len(csv)):
-            close = csv[bar].split(',')[6]
-            close = float(close)
-            tempArr.append(close)
-        tempArr = tempArr[::-1]
-        priceArr.append(tempArr)
-        if val == gTicker:
-            theInd = priceArr.index(tempArr)
-            print(theInd)
-    except:
-        print()
+    csv = urllib2.urlopen(string).readlines()
+    #for bar in xrange(1,min(len(csv),500)):
+    for bar in xrange(1,len(csv)):
+        close = csv[bar].split(',')[6]
+        close = float(close)
+        tempArr.append(close)
+    tempArr = tempArr[::-1]
+    priceArr.append(tempArr)
+    if val == gTicker:
+        theInd = priceArr.index(tempArr)
 
 def currentPat(tickerCol):
     global curPat
