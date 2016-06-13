@@ -203,7 +203,7 @@ def runGo(ticker,selection):
 
             patLen = 10
             # Make the Pool of workers
-            pool = ThreadPool(4)
+            pool = ThreadPool(3)
             # Open the urls in their own threads
             # and return the results
             results = pool.map(yahooLoad, arr)
@@ -213,11 +213,11 @@ def runGo(ticker,selection):
         elif selection == 2:
             arr = [ticker,'EURUSD','GOOGL','AMZN','USDJPY','NFLX','MSFT','ORCL','MCD','KO',
                        'AGN','T','VZ','APA','XOM','M','MA','BAC','JPM','GS','NKE','AUDJPY','GBPUSD',
-                       'JCP','HES','COP','JNJ','SBUX','F','GE','ABBV']
+                       'JCP','HES','COP','JNJ','SBUX','F','GE','ABBV','QCOM','WFC','PEP','GILD','V','SLB','LUV','CL','PG','HD','CVX','C','IBM','INTC','MS']
 
             interval = 3600
             patLen = 24
-            pool = ThreadPool(4)
+            pool = ThreadPool(3)
             # Open the urls in their own threads
             # and return the results
             results = pool.map(loadQuote, arr)
@@ -228,11 +228,11 @@ def runGo(ticker,selection):
         elif selection == 3:
             arr = [ticker,'EURUSD','GOOGL','AMZN','USDJPY','NFLX','MSFT','ORCL','MCD','KO',
                        'AGN','T','VZ','APA','XOM','M','MA','BAC','JPM','GS','NKE','AUDJPY','GBPUSD',
-                       'JCP','HES','COP','JNJ','SBUX','F','GE','ABBV']
+                       'JCP','HES','COP','JNJ','SBUX','F','GE','ABBV','QCOM','WFC','PEP','GILD','V','SLB','LUV','CL','PG','HD','CVX','C','IBM','INTC','MS']
 
             interval = 900
             patLen = 24
-            pool = ThreadPool(4)
+            pool = ThreadPool(3)
             # Open the urls in their own threads
             # and return the results
             results = pool.map(loadQuote, arr)
