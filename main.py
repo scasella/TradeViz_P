@@ -77,7 +77,6 @@ def yahooLoad(val):
             close = float(close)
             tempArr.append(close)
         tempArr = tempArr[::-1]
-        tempArr = np.array(tempArr, dtype=float)
         priceArr.append(tempArr)
         if val == gTicker:
             theInd = priceArr.index(tempArr)
@@ -199,59 +198,59 @@ def runGo(ticker,selection):
     global gTicker
 
     gTicker = ticker
+    try:
+        if selection == 1:
+            arr = [ticker,'GOOGL','AMZN','NFLX','MSFT','ORCL','MCD','KO',
+                       'AGN','T','VZ','APA','XOM','M','MA','BAC','JPM','GS','NKE',
+                       'JCP','HES','COP','JNJ','SBUX','F','GE','ABBV','WFC','SLB',
+                       'GILD','MO','GE','V','WMT','PEP','QCOM']
 
-    if selection == 1:
-        arr = [ticker,'GOOGL','AMZN','NFLX','MSFT','ORCL','MCD','KO',
-                   'AGN','T','VZ','APA','XOM','M','MA','BAC','JPM','GS','NKE',
-                   'JCP','HES','COP','JNJ','SBUX','F','GE','ABBV','WFC','SLB',
-                   'GILD','MO','GE','V','WMT','PEP','QCOM']
+            patLen = 10
+            # Make the Pool of workers
+            pool = ThreadPool(4)
+            # Open the urls in their own threads
+            # and return the results
+            results = pool.map(yahooLoad, arr)
+            #close the pool and wait for the work to finish
+            pool.close()
+            pool.join()
+        elif selection == 2:
+            arr = ['SPY','EURUSD','GOOGL','AMZN','USDJPY','NFLX','MSFT','ORCL','MCD','KO',
+                       'AGN','T','VZ','APA','XOM','M','MA','BAC','JPM','GS','NKE','AUDJPY','GBPUSD',
+                       'JCP','HES','COP','JNJ','SBUX','F','GE','ABBV']
 
-        patLen = 10
-        # Make the Pool of workers
-        pool = ThreadPool(4)
-        # Open the urls in their own threads
-        # and return the results
-        results = pool.map(yahooLoad, arr)
-        #close the pool and wait for the work to finish
-        pool.close()
-        pool.join()
-    elif selection == 2:
-        arr = ['SPY','EURUSD','GOOGL','AMZN','USDJPY','NFLX','MSFT','ORCL','MCD','KO',
-                   'AGN','T','VZ','APA','XOM','M','MA','BAC','JPM','GS','NKE','AUDJPY','GBPUSD',
-                   'JCP','HES','COP','JNJ','SBUX','F','GE','ABBV']
+            interval = 3600
+            patLen = 24
+            pool = ThreadPool(4)
+            # Open the urls in their own threads
+            # and return the results
+            results = pool.map(loadQuote, arr)
+            #close the pool and wait for the work to finish
+            pool.close()
+            pool.join()
 
-        interval = 3600
-        patLen = 24
-        pool = ThreadPool(4)
-        # Open the urls in their own threads
-        # and return the results
-        results = pool.map(loadQuote, arr)
-        #close the pool and wait for the work to finish
-        pool.close()
-        pool.join()
+        elif selection == 3:
+            arr = ['SPY','EURUSD','GOOGL','AMZN','USDJPY','NFLX','MSFT','ORCL','MCD','KO',
+                       'AGN','T','VZ','APA','XOM','M','MA','BAC','JPM','GS','NKE','AUDJPY','GBPUSD',
+                       'JCP','HES','COP','JNJ','SBUX','F','GE','ABBV']
 
-    elif selection == 3:
-        arr = ['SPY','EURUSD','GOOGL','AMZN','USDJPY','NFLX','MSFT','ORCL','MCD','KO',
-                   'AGN','T','VZ','APA','XOM','M','MA','BAC','JPM','GS','NKE','AUDJPY','GBPUSD',
-                   'JCP','HES','COP','JNJ','SBUX','F','GE','ABBV']
+            interval = 900
+            patLen = 24
+            pool = ThreadPool(4)
+            # Open the urls in their own threads
+            # and return the results
+            results = pool.map(loadQuote, arr)
+            #close the pool and wait for the work to finish
+            pool.close()
+            pool.join()
 
-        interval = 900
-        patLen = 24
-        pool = ThreadPool(4)
-        # Open the urls in their own threads
-        # and return the results
-        results = pool.map(loadQuote, arr)
-        #close the pool and wait for the work to finish
-        pool.close()
-        pool.join()
-
-    currentPat(theInd)
-    collectPats(theInd)
-    matchPats()
-    plotting(False)
-    totalDict = {'matches': matchedPat,'current': curPat,'future': futureAverages, 'stDev': stDev}
-#except (RuntimeError, TypeError, NameError):
-     #   totalDict = {'error':'error','error':'error','error':'error','error':'error'}
+        currentPat(theInd)
+        collectPats(theInd)
+        matchPats()
+        plotting(False)
+        totalDict = {'matches': matchedPat,'current': curPat,'future': futureAverages, 'stDev': stDev}
+    except (RuntimeError, TypeError, NameError):
+        totalDict = {'error':'error','error':'error','error':'error','error':'error'}
     priceArr = []
     patCollect = []
     endingInd = []
