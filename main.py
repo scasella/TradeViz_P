@@ -196,10 +196,9 @@ def runGo(ticker,selection):
     gTicker = ticker
     try:
         if selection == 1:
-            arr = [ticker,'GOOGL','AMZN','NFLX','MSFT','ORCL','MCD','KO',
-                       'AGN','T','VZ','APA','XOM','M','MA','BAC','JPM','GS','NKE',
-                       'JCP','HES','COP','JNJ','SBUX','F','GE','ABBV','WFC','SLB',
-                       'GILD','MO','GE','V','WMT','PEP','QCOM']
+            arr = [ticker,'GOOGL','AMZN','NFLX','MSFT','SBUX','MCD','GS',
+                       'AGN','T','VZ','SLB','XOM','M','MA','BAC','JPM','WMT',
+                       'GE']
 
             patLen = 10
             # Make the Pool of workers
