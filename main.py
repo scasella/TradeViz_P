@@ -9,7 +9,7 @@ from sys import argv
 import numpy as np
 np.seterr(divide='ignore', invalid='ignore')
 import urllib2
-from multiprocessing import Pool as ThreadPool
+from multiprocessing.dummy import Pool as ThreadPool
 import math
 
 import json
