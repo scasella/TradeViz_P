@@ -197,8 +197,8 @@ def runGo(ticker,selection):
     try:
         if selection == 1:
             arr = [ticker,'GOOGL','AMZN','NFLX','MSFT','SBUX','MCD','GS',
-                       'AGN','T','VZ','SLB','XOM','M','MA','BAC','JPM','WMT',
-                       'GE']
+                       'AGN','T','VZ','SLB','XOM','LUV','MA','BAC','JPM','WMT',
+                       'ABBV','JNJ','PEP','GILD','QCOM']
 
             patLen = 10
             # Make the Pool of workers
