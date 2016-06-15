@@ -203,7 +203,7 @@ def runGo(ticker,selection):
 
             patLen = 10
             # Make the Pool of workers
-            pool = ThreadPool(5)
+            pool = ThreadPool(4)
             # Open the urls in their own threads
             # and return the results
             results = pool.map(yahooLoad, arr)
@@ -217,7 +217,7 @@ def runGo(ticker,selection):
 
             interval = 3600
             patLen = 24
-            pool = ThreadPool(5)
+            pool = ThreadPool(4)
             # Open the urls in their own threads
             # and return the results
             results = pool.map(loadQuote, arr)
@@ -232,7 +232,7 @@ def runGo(ticker,selection):
 
             interval = 900
             patLen = 24
-            pool = ThreadPool(5)
+            pool = ThreadPool(4)
             # Open the urls in their own threads
             # and return the results
             results = pool.map(loadQuote, arr)
