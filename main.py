@@ -206,7 +206,7 @@ def runGo(ticker,selection):
             pool = ThreadPool(4)
             # Open the urls in their own threads
             # and return the results
-            results = pool.map(yahooLoad, arr)
+            pool.map(yahooLoad, arr)
             #close the pool and wait for the work to finish
             pool.close()
             pool.join()
@@ -220,7 +220,7 @@ def runGo(ticker,selection):
             pool = ThreadPool(4)
             # Open the urls in their own threads
             # and return the results
-            results = pool.map(loadQuote, arr)
+            pool.map(loadQuote, arr)
             #close the pool and wait for the work to finish
             pool.close()
             pool.join()
@@ -235,7 +235,7 @@ def runGo(ticker,selection):
             pool = ThreadPool(4)
             # Open the urls in their own threads
             # and return the results
-            results = pool.map(loadQuote, arr)
+            pool.map(loadQuote, arr)
             #close the pool and wait for the work to finish
             pool.close()
             pool.join()
