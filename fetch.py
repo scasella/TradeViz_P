@@ -39,10 +39,10 @@ def loadQuote(val):
 
 
 
-arr = ['GOOGL','AMZN','NFLX','MSFT','ORCL','MCD','KO',
-       'AGN','T','VZ','APA','XOM','M','MA','BAC','JPM','GS','NKE',
-       'JCP','HES','COP','JNJ','SBUX','F','GE','ABBV','WFC','SLB',
-       'GILD','MO','GE','V','WMT','PEP','QCOM']
+arr = ['A','AA','AAL','AAP','AAPL','ABBV','ABC','ABT','ACN','ADBE','ADI','ADM','ADP','ADS','ADSK','AEE',
+'AEP','AES','AET','AFL','AGN','AIG','AIV','AIZ','AKAM','ALK','ALL','ALLE','ALXN','AMAT','AME','AMG','AMGN','AMP',
+'AMT','AMZN','AN','ANTM','AON','APA','APC','APD','APH','ATVI','AVB','AVGO','AVY','AWK','AXP','AYI','AZO','BA','BAC',
+'BAX','BBBY','BBT','BBY','BCR','BEN']
 
 pool = ThreadPool(4)
 pool.map(yahooLoad, arr)
@@ -56,10 +56,10 @@ with open(r"one.pickle", "wb") as output_file:
 
 
 
-arr = ['GOOGL','AMZN','NFLX','MSFT','ORCL','MCD','KO',
-       'AGN','T','VZ','APA','XOM','M','MA','BAC','JPM','GS','NKE',
-       'JCP','HES','COP','JNJ','SBUX','F','GE','ABBV','WFC','SLB',
-       'GILD','MO','GE','V','WMT','PEP','QCOM']
+arr = ['A','AA','AAL','AAP','AAPL','ABBV','ABC','ABT','ACN','ADBE','ADI','ADM','ADP','ADS','ADSK','AEE',
+'AEP','AES','AET','AFL','AGN','AIG','AIV','AIZ','AKAM','ALK','ALL','ALLE','ALXN','AMAT','AME','AMG','AMGN','AMP',
+'AMT','AMZN','AN','ANTM','AON','APA','APC','APD','APH','ATVI','AVB','AVGO','AVY','AWK','AXP','AYI','AZO','BA','BAC',
+'BAX','BBBY','BBT','BBY','BCR','BEN']
 
 interval = 3600
 pool = ThreadPool(4)
@@ -74,10 +74,10 @@ with open(r"two.pickle", "wb") as output_file:
 
 
 
-arr = ['GOOGL','AMZN','NFLX','MSFT','ORCL','MCD','KO',
-       'AGN','T','VZ','APA','XOM','M','MA','BAC','JPM','GS','NKE',
-       'JCP','HES','COP','JNJ','SBUX','F','GE','ABBV','WFC','SLB',
-       'GILD','MO','GE','V','WMT','PEP','QCOM']
+arr = ['A','AA','AAL','AAP','AAPL','ABBV','ABC','ABT','ACN','ADBE','ADI','ADM','ADP','ADS','ADSK','AEE',
+'AEP','AES','AET','AFL','AGN','AIG','AIV','AIZ','AKAM','ALK','ALL','ALLE','ALXN','AMAT','AME','AMG','AMGN','AMP',
+'AMT','AMZN','AN','ANTM','AON','APA','APC','APD','APH','ATVI','AVB','AVGO','AVY','AWK','AXP','AYI','AZO','BA','BAC',
+'BAX','BBBY','BBT','BBY','BCR','BEN']
 
 interval = 900
 pool = ThreadPool(4)

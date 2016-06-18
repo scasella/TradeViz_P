@@ -78,7 +78,7 @@ def yahooLoad(val):
 
     csv = urllib2.urlopen(string).readlines()
     #for bar in xrange(1,min(len(csv),500)):
-    for bar in xrange(1,min(100,len(csv))):
+    for bar in xrange(1,len(csv)):
         close = csv[bar].split(',')[6]
         close = float(close)
         tempArr.append(close)
