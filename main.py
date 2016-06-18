@@ -11,6 +11,7 @@ np.seterr(divide='ignore', invalid='ignore')
 import urllib2
 from multiprocessing.dummy import Pool as ThreadPool
 import math
+import cPickle
 
 import json
 
@@ -42,50 +43,53 @@ def percentChange(startPoint,currentPoint):
         print(currentPoint, startPoint)
         return 0.00000000001
 
-def loadQuote(val):
-    global interval
+def loadQuote(val, interval):
     global priceArr
-    global theInd
-    global gTicker
     tempArr = []
     string = ""
     string = 'https://www.google.com/finance/getprices?q={0}&i={1}&p=200d&f=d,c,v'.format(val,interval)
 
     csv = urllib2.urlopen(string).readlines()
-    for bar in xrange(8,len(csv)):
+    for bar in xrange(8,min(100,len(csv))):
         offset,close,volume = csv[bar].split(',')
         if offset[0]!='a':
             tempArr.append(float(close))
-    priceArr.append(tempArr)
-    if val == gTicker:
-        theInd = priceArr.index(tempArr)
+    if interval == 3600:
+        with open(r"two.pickle", "rb") as input_file:
+            e = cPickle.load(input_file)
+            priceArr = e
+    else:
+        with open(r"three.pickle", "rb") as input_file:
+            e = cPickle.load(input_file)
+            priceArr = e
+    priceArr.insert(0, tempArr)
 
 
 def yahooLoad(val):
     global priceArr
-    global theInd
-    global gTicker
     tempArr = []
     string = ""
     string = 'http://ichart.finance.yahoo.com/table.csv?s={0}'.format(val)
 
     csv = urllib2.urlopen(string).readlines()
     #for bar in xrange(1,min(len(csv),500)):
-    for bar in xrange(1,len(csv)):
+    for bar in xrange(1,min(100,len(csv))):
         close = csv[bar].split(',')[6]
         close = float(close)
         tempArr.append(close)
     tempArr = tempArr[::-1]
-    priceArr.append(tempArr)
-    if val == gTicker:
-        theInd = priceArr.index(tempArr)
+    with open(r"one.pickle", "rb") as input_file:
+        e = cPickle.load(input_file)
+        priceArr = e
+        priceArr.insert(0, tempArr)
 
-def currentPat(tickerCol):
+
+def currentPat():
     global curPat
     global patLen
     curPat = []
     sliceLen = patLen
-    curr = priceArr[tickerCol][-(sliceLen+1):]
+    curr = priceArr[0][-(sliceLen+1):]
     while curr[-2] == curr[-1]:
         sliceLen += 1
         curr = priceArr[tickerCol][-sliceLen:]
@@ -95,29 +99,30 @@ def currentPat(tickerCol):
         curPat.append(temp)
         i += 1
 
-def collectPats(tickerCol):
+def collectPats():
     global patCollect
     global endingInd
     patCollect = []
     endingInd = []
-    for each in priceArr:
-        tempCollect = []
-        tempEnd = []
-        sIndex = 0
-        length = (len(each) - patLen - futureE)
+    for i,each in enumerate(priceArr):
+        if i != 0:
+            tempCollect = []
+            tempEnd = []
+            sIndex = 0
+            length = (len(each) - patLen - futureE)
 
-        while sIndex < length:
-            inc = 1
-            tempPat = []
-            while inc <= patLen:
-                temp = percentChange(each[sIndex + inc -1], each[sIndex + inc])
-                inc += 1
-                tempPat.append(temp)
-            tempCollect.append(tempPat)
-            tempEnd.append(sIndex+patLen)
-            sIndex += (patLen)
-        patCollect.append(tempCollect)
-        endingInd.append(tempEnd)
+            while sIndex < length:
+                inc = 1
+                tempPat = []
+                while inc <= patLen:
+                    temp = percentChange(each[sIndex + inc -1], each[sIndex + inc])
+                    inc += 1
+                    tempPat.append(temp)
+                tempCollect.append(tempPat)
+                tempEnd.append(sIndex+patLen)
+                sIndex += (patLen)
+            patCollect.append(tempCollect)
+            endingInd.append(tempEnd)
 
 
 def sortPats(array):
@@ -126,6 +131,7 @@ def sortPats(array):
         return tup[1]
     finalArr = sorted(array, key=getKey)
     return finalArr
+
 
 def matchPats():
     colNum = 0
@@ -145,7 +151,7 @@ def matchPats():
                 mseCollect.append(mseTemp)
             #mseAvg = np.average(weighting)
             mseAvg = np.average(mseCollect)
-            bestMatches.append(([row,colInd,endingInd[colInd][rowInd]],mseAvg))
+            bestMatches.append(([row,colInd+1,endingInd[colInd][rowInd]],mseAvg))
     test = sortPats(bestMatches)
     for item in test[:10]:
         matchedPat.append(item[0][0])
@@ -179,82 +185,34 @@ def plotting(isPlotting):
                 stDev.append(np.std(tempOutcomes))
 
 def runGo(ticker,selection):
-    global priceArr
-    global patCollect
-    global endingInd
-    global matchedEndInd
-    global curPat
-    global matchedPat
     global futureAverages
     global stDev
     global patLen
     global totalDict
-    global interval
-    global theInd
-    global gTicker
 
-    gTicker = ticker
-    try:
-        if selection == 1:
-            arr = [ticker,'GOOGL','AMZN','NFLX','MSFT','SBUX','MCD','GS',
-                       'AGN','T','VZ','SLB','XOM','LUV','MA','BAC','JPM','WMT',
-                       'ABBV','JNJ','PEP','GILD','QCOM']
+    if selection == 1:
 
-            patLen = 10
-            # Make the Pool of workers
-            pool = ThreadPool(4)
-            # Open the urls in their own threads
-            # and return the results
-            pool.map(yahooLoad, arr)
-            #close the pool and wait for the work to finish
-            pool.close()
-            pool.join()
-        elif selection == 2:
-            arr = [ticker,'EURUSD','GOOGL','AMZN','USDJPY','NFLX','MSFT','ORCL','MCD','KO',
-                       'AGN','T','VZ','APA','XOM','M','MA','BAC','JPM','GS','NKE','AUDJPY','GBPUSD',
-                       'JCP','HES','COP','JNJ','SBUX','F','GE','ABBV','QCOM','WFC','PEP','GILD','V','SLB','LUV','CL','PG','HD','CVX','C','IBM','INTC','MS']
+        yahooLoad(ticker)
+        patLen = 10
 
-            interval = 3600
-            patLen = 24
-            pool = ThreadPool(4)
-            # Open the urls in their own threads
-            # and return the results
-            pool.map(loadQuote, arr)
-            #close the pool and wait for the work to finish
-            pool.close()
-            pool.join()
+    elif selection == 2:
 
-        elif selection == 3:
-            arr = [ticker,'EURUSD','GOOGL','AMZN','USDJPY','NFLX','MSFT','ORCL','MCD','KO',
-                       'AGN','T','VZ','APA','XOM','M','MA','BAC','JPM','GS','NKE','AUDJPY','GBPUSD',
-                       'JCP','HES','COP','JNJ','SBUX','F','GE','ABBV','QCOM','WFC','PEP','GILD','V','SLB','LUV','CL','PG','HD','CVX','C','IBM','INTC','MS']
+        loadQuote(ticker,3600)
+        patLen = 24
 
-            interval = 900
-            patLen = 24
-            pool = ThreadPool(4)
-            # Open the urls in their own threads
-            # and return the results
-            pool.map(loadQuote, arr)
-            #close the pool and wait for the work to finish
-            pool.close()
-            pool.join()
+    elif selection == 3:
 
-        currentPat(theInd)
-        collectPats(theInd)
-        matchPats()
-        plotting(False)
-        totalDict = {'matches': matchedPat,'current': curPat,'future': futureAverages, 'stDev': stDev}
-    except (RuntimeError, TypeError, NameError):
-        totalDict = {'error':'error','error':'error','error':'error','error':'error'}
-    priceArr = []
-    patCollect = []
-    endingInd = []
-    matchedEndInd = []
-    curPat = []
-    matchedPat = []
+        loadQuote(ticker,900)
+        patLen = 24
+
+    currentPat()
+    collectPats()
+    matchPats()
+    plotting(True)
+    totalDict = {'matches': matchedPat,'current': curPat,'future': futureAverages, 'stDev': stDev}
+
     futureAverages = []
     stDev = []
-    theInd = 7
 
 @hook('after_request')
 def enable_cors():
