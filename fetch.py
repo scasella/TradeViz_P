@@ -7,7 +7,6 @@ interval = 0
 
 def yahooLoad(val):
     global exportArr
-    exportArr = []
     string = ""
     tempArr = []
     string = 'http://ichart.finance.yahoo.com/table.csv?s={0}'.format(val)
@@ -25,7 +24,6 @@ def yahooLoad(val):
 def loadQuote(val):
     global exportArr
     global interval
-    exportArr = []
     tempArr = []
     string = ""
     string = 'https://www.google.com/finance/getprices?q={0}&i={1}&p=200d&f=d,c,v'.format(val,interval)
@@ -44,6 +42,7 @@ arr = ['A','AA','AAL','AAP','AAPL','ABBV','ABC','ABT','ACN','ADBE','ADI','ADM','
 'AMT','AMZN','AN','ANTM','AON','APA','APC','APD','APH','ATVI','AVB','AVGO','AVY','AWK','AXP','AYI','AZO','BA','BAC',
 'BAX','BBBY','BBT','BBY','BCR','BEN']
 
+exportArr = []
 pool = ThreadPool(4)
 pool.map(yahooLoad, arr)
 pool.close()
@@ -61,6 +60,7 @@ arr = ['A','AA','AAL','AAP','AAPL','ABBV','ABC','ABT','ACN','ADBE','ADI','ADM','
 'AMT','AMZN','AN','ANTM','AON','APA','APC','APD','APH','ATVI','AVB','AVGO','AVY','AWK','AXP','AYI','AZO','BA','BAC',
 'BAX','BBBY','BBT','BBY','BCR','BEN']
 
+exportArr = []
 interval = 3600
 pool = ThreadPool(4)
 pool.map(loadQuote, arr)
@@ -79,6 +79,7 @@ arr = ['A','AA','AAL','AAP','AAPL','ABBV','ABC','ABT','ACN','ADBE','ADI','ADM','
 'AMT','AMZN','AN','ANTM','AON','APA','APC','APD','APH','ATVI','AVB','AVGO','AVY','AWK','AXP','AYI','AZO','BA','BAC',
 'BAX','BBBY','BBT','BBY','BCR','BEN']
 
+exportArr = []
 interval = 900
 pool = ThreadPool(4)
 pool.map(loadQuote, arr)

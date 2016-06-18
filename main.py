@@ -64,7 +64,7 @@ def loadQuote(val, interval):
     else:
         with open(r"three.pickle", "rb") as input_file:
             e = cPickle.load(input_file)
-            priceArr = e
+            priceArr = e 
 
 
 def yahooLoad(val):
@@ -78,7 +78,7 @@ def yahooLoad(val):
 
     csv = urllib2.urlopen(string).readlines()
     #for bar in xrange(1,min(len(csv),500)):
-    for bar in xrange(1,len(csv)):
+    for bar in xrange(1,min(100,len(csv))):
         close = csv[bar].split(',')[6]
         close = float(close)
         tempArr.append(close)
@@ -156,7 +156,7 @@ def matchPats():
                 mseTemp = abs(curPat[ind] - item)
                 mseCollect.append(mseTemp)
             #mseAvg = np.average(weighting)
-            mseAvg = np.sum(mseCollect)
+            mseAvg = np.average(mseCollect)
             bestMatches.append(([row,colInd,endingInd[colInd][rowInd]],mseAvg))
     test = sortPats(bestMatches)
     for item in test[:10]:
