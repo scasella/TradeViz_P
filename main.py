@@ -156,7 +156,7 @@ def matchPats():
                 mseTemp = abs(curPat[ind] - item)
                 mseCollect.append(mseTemp)
             #mseAvg = np.average(weighting)
-            mseAvg = np.average(mseCollect)
+            mseAvg = np.sum(mseCollect)
             bestMatches.append(([row,colInd,endingInd[colInd][rowInd]],mseAvg))
     test = sortPats(bestMatches)
     for item in test[:10]:
