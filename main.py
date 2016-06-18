@@ -44,7 +44,7 @@ def percentChange(startPoint,currentPoint):
 
 def loadQuote(val, interval):
     global priceArr
-    global currArr
+    global curArr
     priceArr = []
     curArr = []
     tempArr = []
@@ -56,20 +56,20 @@ def loadQuote(val, interval):
         offset,close,volume = csv[bar].split(',')
         if offset[0]!='a':
             tempArr.append(float(close))
+    curArr.append(tempArr)
     if interval == 3600:
         with open(r"two.pickle", "rb") as input_file:
             e = cPickle.load(input_file)
-            priceArr.append(e)
+            priceArr = e
     else:
         with open(r"three.pickle", "rb") as input_file:
             e = cPickle.load(input_file)
-            priceArr.append(e)
-    curArr.append(tempArr)
+            priceArr = e
 
 
 def yahooLoad(val):
     global priceArr
-    global currArr
+    global curArr
     priceArr = []
     curArr = []
     tempArr = []
@@ -86,7 +86,7 @@ def yahooLoad(val):
     curArr.append(tempArr)
     with open(r"one.pickle", "rb") as input_file:
         e = cPickle.load(input_file)
-        priceArr.append(e)
+        priceArr = e
 
 
 def currentPat():
@@ -95,10 +95,10 @@ def currentPat():
     global curArr
     curPat = []
     sliceLen = patLen
-    curr = curArr[0]
+    curr = curArr[0][-(sliceLen+1):]
     while curr[-2] == curr[-1]:
         sliceLen += 1
-        curr = priceArr[tickerCol][-sliceLen:]
+        curr = curArr[0][-(sliceLen+1):]
     i = 0
     while i < patLen:
         temp = percentChange(curr[i], curr[i + 1])
@@ -110,7 +110,7 @@ def collectPats():
     global endingInd
     patCollect = []
     endingInd = []
-    for i,each in enumerate(priceArr):
+    for each in priceArr:
         tempCollect = []
         tempEnd = []
         sIndex = 0
@@ -128,6 +128,7 @@ def collectPats():
             sIndex += (patLen)
         patCollect.append(tempCollect)
         endingInd.append(tempEnd)
+
 
 
 def sortPats(array):
@@ -195,6 +196,7 @@ def runGo(ticker,selection):
     global patLen
     global totalDict
     global curArr
+    global matchedPat
 
     if selection == 1:
 
@@ -216,7 +218,6 @@ def runGo(ticker,selection):
     matchPats()
     plotting(True)
     totalDict = {'matches': matchedPat,'current': curPat,'future': futureAverages, 'stDev': stDev}
-
     futureAverages = []
     stDev = []
     curArr = []
