@@ -49,7 +49,7 @@ def loadQuote(val, interval):
     curArr = []
     tempArr = []
     string = ""
-    string = 'https://www.google.com/finance/getprices?q={0}&i={1}&p=200d&f=c'.format(val,interval)
+    string = 'https://www.google.com/finance/getprices?q={0}&i={1}&p=200d&f=d,c'.format(val,interval)
 
     csv = urllib2.urlopen(string).readlines()
     for bar in xrange(7,len(csv)):
