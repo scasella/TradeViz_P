@@ -53,7 +53,7 @@ def loadQuote(val, interval):
 
     csv = urllib2.urlopen(string).readlines()
     for bar in xrange(7,len(csv)):
-        close = csv[bar]
+        offset,close = csv[bar].split(',')
         if offset[0]!='a':
             tempArr.append(float(close))
     curArr.append(tempArr)
