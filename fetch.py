@@ -1,6 +1,7 @@
 import urllib2
 from multiprocessing.dummy import Pool as ThreadPool
 import cPickle
+import os 
 
 exportArr = []
 
@@ -52,7 +53,7 @@ exportArr = []
 pool = ThreadPool(4)
 pool.map(yahooLoad, arr)
 
-
+os.remove("one.pickle")
 with open(r"one.pickle", "wb") as output_file:
     cPickle.dump(exportArr, output_file)
 
@@ -89,6 +90,7 @@ interval = 3600
 pool = ThreadPool(4)
 pool.map(loadQuote, arr)
 
+os.remove("two.pickle")
 with open(r"two.pickle", "wb") as output_file:
     cPickle.dump(exportArr, output_file)
 
@@ -125,6 +127,7 @@ interval = 900
 pool = ThreadPool(4)
 pool.map(loadQuote, arr)
 
+os.remove("three.pickle")
 with open(r"three.pickle", "wb") as output_file:
     cPickle.dump(exportArr, output_file)
 
