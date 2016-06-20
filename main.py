@@ -30,7 +30,7 @@ matchedPat = []
 matchedEndInd = []
 futureAverages = []
 stDev = []
-interval = 3600
+interval = 0
 totalDict = {}
 curArr = []
 
@@ -49,11 +49,11 @@ def loadQuote(val, interval):
     curArr = []
     tempArr = []
     string = ""
-    string = 'https://www.google.com/finance/getprices?q={0}&i={1}&p=200d&f=d,c,v'.format(val,interval)
+    string = 'https://www.google.com/finance/getprices?q={0}&i={1}&p=200d&f=c'.format(val,interval)
 
     csv = urllib2.urlopen(string).readlines()
-    for bar in xrange(8,min(100,len(csv))):
-        offset,close,volume = csv[bar].split(',')
+    for bar in xrange(7,len(csv)):
+        close = csv[bar]
         if offset[0]!='a':
             tempArr.append(float(close))
     curArr.append(tempArr)
@@ -61,7 +61,7 @@ def loadQuote(val, interval):
         with open(r"two.pickle", "rb") as input_file:
             e = cPickle.load(input_file)
             priceArr = e
-    else:
+    elif interval == 900:
         with open(r"three.pickle", "rb") as input_file:
             e = cPickle.load(input_file)
             priceArr = e 
@@ -78,7 +78,7 @@ def yahooLoad(val):
 
     csv = urllib2.urlopen(string).readlines()
     #for bar in xrange(1,min(len(csv),500)):
-    for bar in xrange(1,min(100,len(csv))):
+    for bar in xrange(1,len(csv)):
         close = csv[bar].split(',')[6]
         close = float(close)
         tempArr.append(close)
