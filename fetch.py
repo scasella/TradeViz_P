@@ -22,12 +22,13 @@ def yahooLoad(val):
 
 def loadQuote(val,interval):
     global exportArr
+    global interval
     tempArr = []
     string = ""
     string = 'https://www.google.com/finance/getprices?q={0}&i={1}&p=200d&f=d,c,v'.format(val,interval)
 
     csv = urllib2.urlopen(string).readlines()
-    for bar in xrange(8,min(100,len(csv))):
+    for bar in xrange(8,len(csv)):
         offset,close,volume = csv[bar].split(',')
         if offset[0]!='a':
             tempArr.append(float(close))
@@ -42,8 +43,8 @@ arr = ['A','AA','AAL','AAP','AAPL','ABBV','ABC','ABT','ACN','ADBE','ADI','ADM','
 
 exportArr = []
 
-for i in arr:
-    yahooLoad(i)
+pool = ThreadPool(4)
+pool.map(yahooLoad, arr)
 
 with open(r"one.pickle", "wb") as output_file:
     cPickle.dump("", output_file)
@@ -59,8 +60,9 @@ arr = ['A','AA','AAL','AAP','AAPL','ABBV','ABC','ABT','ACN','ADBE','ADI','ADM','
 
 exportArr = []
 
-for i in arr:
-    loadQuote(i,3600)
+interval = 3600 
+pool = ThreadPool(4)
+pool.map(loadQuote, arr)
 
 with open(r"two.pickle", "wb") as output_file:
     cPickle.dump("", output_file)
@@ -76,10 +78,12 @@ arr = ['A','AA','AAL','AAP','AAPL','ABBV','ABC','ABT','ACN','ADBE','ADI','ADM','
 
 exportArr = []
 
-for i in arr:
-    loadQuote(i,900)
+interval = 900 
+pool = ThreadPool(4)
+pool.map(loadQuote, arr)
 
 with open(r"three.pickle", "wb") as output_file:
     cPickle.dump("", output_file)
 with open(r"three.pickle", "wb") as output_file:
     cPickle.dump(exportArr, output_file)
+
