@@ -3,7 +3,6 @@ from multiprocessing.dummy import Pool as ThreadPool
 import cPickle
 
 exportArr = []
-interval = 0
 
 def yahooLoad(val):
     global exportArr
@@ -21,9 +20,8 @@ def yahooLoad(val):
     exportArr.append(tempArr)
 
 
-def loadQuote(val):
+def loadQuote(val,interval):
     global exportArr
-    global interval
     tempArr = []
     string = ""
     string = 'https://www.google.com/finance/getprices?q={0}&i={1}&p=200d&f=d,c,v'.format(val,interval)
@@ -43,10 +41,9 @@ arr = ['A','AA','AAL','AAP','AAPL','ABBV','ABC','ABT','ACN','ADBE','ADI','ADM','
 'BAX','BBBY','BBT','BBY','BCR','BEN']
 
 exportArr = []
-pool = ThreadPool(4)
-pool.map(yahooLoad, arr)
-pool.close()
-pool.join()
+
+for i in arr:
+    yahooLoad(i)
 
 with open(r"one.pickle", "wb") as output_file:
     cPickle.dump("", output_file)
@@ -61,11 +58,9 @@ arr = ['A','AA','AAL','AAP','AAPL','ABBV','ABC','ABT','ACN','ADBE','ADI','ADM','
 'BAX','BBBY','BBT','BBY','BCR','BEN']
 
 exportArr = []
-interval = 3600
-pool = ThreadPool(4)
-pool.map(loadQuote, arr)
-pool.close()
-pool.join()
+
+for i in arr:
+    loadQuote(i,3600)
 
 with open(r"two.pickle", "wb") as output_file:
     cPickle.dump("", output_file)
@@ -80,11 +75,9 @@ arr = ['A','AA','AAL','AAP','AAPL','ABBV','ABC','ABT','ACN','ADBE','ADI','ADM','
 'BAX','BBBY','BBT','BBY','BCR','BEN']
 
 exportArr = []
-interval = 900
-pool = ThreadPool(4)
-pool.map(loadQuote, arr)
-pool.close()
-pool.join()
+
+for i in arr:
+    loadQuote(i,900)
 
 with open(r"three.pickle", "wb") as output_file:
     cPickle.dump("", output_file)
