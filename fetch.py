@@ -20,7 +20,7 @@ def yahooLoad(val):
     exportArr.append(tempArr)
 
 
-def loadQuote(val,interval):
+def loadQuote(val):
     global exportArr
     global interval
     tempArr = []
