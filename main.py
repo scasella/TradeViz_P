@@ -125,7 +125,7 @@ def collectPats():
                 tempPat.append(temp)
             tempCollect.append(tempPat)
             tempEnd.append(sIndex+patLen)
-            sIndex += (patLen)
+            sIndex += (patLen/2)
         patCollect.append(tempCollect)
         endingInd.append(tempEnd)
 
