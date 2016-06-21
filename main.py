@@ -64,7 +64,7 @@ def loadQuote(val, interval):
     elif interval == 900:
         with open(r"three.pickle", "rb") as input_file:
             e = cPickle.load(input_file)
-            priceArr = e 
+            priceArr = e
 
 
 def yahooLoad(val):
@@ -200,18 +200,21 @@ def runGo(ticker,selection):
 
     if selection == 1:
 
-        yahooLoad(ticker)
         patLen = 10
+        yahooLoad(ticker)
+
 
     elif selection == 2:
 
-        loadQuote(ticker,3600)
         patLen = 24
+        loadQuote(ticker,3600)
+
 
     elif selection == 3:
 
-        loadQuote(ticker,900)
         patLen = 24
+        loadQuote(ticker,900)
+
 
     currentPat()
     collectPats()
