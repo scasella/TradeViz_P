@@ -168,6 +168,7 @@ def sortBest(array):
         return val['future'][-1]
     finalArr = sorted(array, key=getKey, reverse=True)
     return finalArr
+
 bestCollect = []
 
 def bestGo(val):
@@ -180,14 +181,15 @@ def bestGo(val):
         totalDict = {'matches': matchedPat,'current': curPat,'future': futureAverages, 'stDev': stDev}
         bestCollect.append(totalDict)
     except:
+        bestCollect.append({'error':'error'})
         pass
 
 
 # In[19]:
 
-arr = ['MMM','ABT','ABBV','ACN','ATVI','AYI','ADBE','AAP','AES','AET','AMG','AFL','A','GAS','APD','AKAM',
-'ALK','AA','ALXN','ALLE','AGN','ADS','ALL','GOOGL','GOOG','MO','AMZN','AEE','AAL','AEP','AXP','AIG','AMT',
-'AWK','AMP','ABC','AME','AMGN','APH','APC','ADI','ANTM','AON','APA','AIV','AAPL','AMAT','ADM','AJG','AIZ','T','ADSK','ADP']
+arr = ['MMM','ABT','ABBV','ACN','ATVI','AYI','ADBE','AAP','AES','AET','AMG','AFL','A','GAS','APD','AKAM']
+#'ALK','AA','ALXN','ALLE','AGN','ADS','ALL','GOOGL','GOOG','MO','AMZN','AEE','AAL','AEP','AXP','AIG','AMT',
+#'AWK','AMP','ABC','AME','AMGN','APH','APC','ADI','ANTM','AON','APA','AIV','AAPL','AMAT','ADM','AJG','AIZ','T','ADSK','ADP']
 #'AN','AZO','AVGO','AVB','AVY','BHI','BLL','BAC','BCR','BAX','BBT','BDX','BBBY','BRK-B','BBY','BIIB','BLK','HRB','BA','BWA','BXP',
 #'BSX','BMY','BF-B','CHRW','CA','CVC','COG','CPB','COF','CAH','KMX','CCL','CAT','CBG','CBS','CELG','CNC','CNP','CTL','CERN','CF',
 #'SCHW','CHK','CVX','CMG','CB','CHD','CI','XEC','CINF','CTAS','CSCO','C','CFG','CTXS','CME','CMS','COH','CTSH','CL','CPGX','CMCSA',
