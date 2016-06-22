@@ -260,6 +260,6 @@ def best():
         t = cPickle.load(input_file)
 
     response.headers['Content-Type'] = 'application/json'
-    return t
+    return json.dumps(t)
 
 run(host='0.0.0.0', port=argv[1])
