@@ -215,11 +215,11 @@ curArr = pool.map(bestGo, arr)
 pool.close()
 pool.join()
         
-submitArr = sortBest(bestCollect)
+#submitArr = sortBest(bestCollect)
         
 os.remove("best.pickle")
 with open(r"best.pickle", "wb") as output_file:
-    cPickle.dump(submitArr, output_file)
+    cPickle.dump(bestCollect, output_file)
 # In[ ]:
 
 
