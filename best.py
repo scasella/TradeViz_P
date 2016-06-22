@@ -187,7 +187,7 @@ def bestGo(val):
 
 # In[19]:
 
-arr = ['MMM','ABT','ABBV','ACN','ATVI','AYI','ADBE','AAP','AES','AET','AMG','AFL','A','GAS','APD','AKAM']
+arr = ['MMM','ABT','ABBV','ACN','ATVI','AYI']#'ADBE','AAP','AES','AET','AMG','AFL','A','GAS','APD','AKAM']
 #'ALK','AA','ALXN','ALLE','AGN','ADS','ALL','GOOGL','GOOG','MO','AMZN','AEE','AAL','AEP','AXP','AIG','AMT',
 #'AWK','AMP','ABC','AME','AMGN','APH','APC','ADI','ANTM','AON','APA','AIV','AAPL','AMAT','ADM','AJG','AIZ','T','ADSK','ADP']
 #'AN','AZO','AVGO','AVB','AVY','BHI','BLL','BAC','BCR','BAX','BBT','BDX','BBBY','BRK-B','BBY','BIIB','BLK','HRB','BA','BWA','BXP',
@@ -213,13 +213,13 @@ arr = ['MMM','ABT','ABBV','ACN','ATVI','AYI','ADBE','AAP','AES','AET','AMG','AFL
 #'HCN','WDC','WU','WRK','WY','WHR','WFM','WMB','WLTW','WEC','WYN','WYNN','XEL','XRX','XLNX','XL','XYL','YHOO','YUM','ZBH','ZION','ZTS']
 
 pool = ThreadPool(4)
-curArr = pool.map(bestGo, arr)
+pool.map(bestGo, arr)
 pool.close()
 pool.join()
         
 #submitArr = sortBest(bestCollect)
         
-os.remove("best.pickle")
+#os.remove("best.pickle")
 with open(r"best.pickle", "wb") as output_file:
     cPickle.dump(bestCollect, output_file)
 # In[ ]:
