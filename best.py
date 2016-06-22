@@ -67,7 +67,6 @@ collectPats()
 # In[6]:
 
 def yahooLoad(val):
-    curArr = []
     tempArr = []
     string = ""
     string = 'http://ichart.finance.yahoo.com/table.csv?s={0}'.format(val)
@@ -89,7 +88,7 @@ def currentPat(curArr):
     curr = curArr[-(sliceLen+1):]
     while curr[-2] == curr[-1]:
         sliceLen += 1
-        curr = curArr[0][-(sliceLen+1):]
+        curr = curArr[-(sliceLen+1):]
     i = 0
     while i < patLen:
         temp = percentChange(curr[i], curr[i + 1])
@@ -109,7 +108,6 @@ def sortPats(array):
 # In[7]:
 
 def matchPats(patCollect,endingInd,curPat):
-    colNum = 0
     matchedPat = []
     matchedEndInd = []
     bestMatches = []
