@@ -213,14 +213,8 @@ pool = ThreadPool(4)
 curArr = pool.map(bestGo, arr)
 pool.close()
 pool.join()
-
-
-finalBest = []
-for val in bestCollect:
-    if ((val['future'][-1])/(val['stDev'][-1])) > 0.70:
-        finalBest.append(val)
         
-submitArr = sortBest(finalBest)
+submitArr = sortBest(bestCollect)
         
 os.remove("best.pickle")
 with open(r"best.pickle", "wb") as output_file:
