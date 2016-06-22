@@ -257,7 +257,7 @@ def main(tickerSubmit, numSelect):
 def best():
     e = []
     with open(r"best.pickle", "rb") as input_file:
-        e = cPickle.load(input_file)
+        e.append(cPickle.load(input_file))
 
     response.headers['Content-Type'] = 'application/json'
     return json.dumps(e)
