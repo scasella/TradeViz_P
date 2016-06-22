@@ -74,20 +74,19 @@ def yahooLoad(val):
 
     csv = urllib2.urlopen(string).readlines()
     #for bar in xrange(1,min(len(csv),500)):
-    for bar in xrange(1,min(150,len(csv))):
+    for bar in xrange(1,len(csv)):
         close = csv[bar].split(',')[6]
         close = float(close)
         tempArr.append(close)
     tempArr = tempArr[::-1]
-    curArr.append(tempArr)
-    return curArr
+    return tempArr
 
     
 def currentPat(curArr):
     global patLen
     curPat = []
     sliceLen = patLen
-    curr = curArr[0][-(sliceLen+1):]
+    curr = curArr[-(sliceLen+1):]
     while curr[-2] == curr[-1]:
         sliceLen += 1
         curr = curArr[0][-(sliceLen+1):]
@@ -171,38 +170,18 @@ def sortBest(array):
         return val['future'][-1]
     finalArr = sorted(array, key=getKey, reverse=True)
     return finalArr
+bestCollect = []
 
-def bestGo():
-    global patLen
-    global matchedPat
-    global arr
-    global patCollect
-    global endingInd
-    
-    bestCollect = []
-        
-    patLen = 10
-    pool = ThreadPool(2)
-    curArr = pool.map(yahooLoad, arr)
-    pool.close()
-    pool.join()
-    for i in curArr:
-        curPat = currentPat(i)
-        matchedPat,matchedEndInd = matchPats(patCollect,endingInd,curPat)
-        futureAverages,stDev = plotting(matchedPat,matchedEndInd)
-        totalDict = {'matches': matchedPat,'current': curPat,'future': futureAverages, 'stDev': stDev}
-        bestCollect.append(totalDict)
+def bestGo(val):
+    global bestCollect
 
-    finalBest = []
-    for val in bestCollect:
-        if ((val['future'][-1])/(val['stDev'][-1])) > 1.0:
-            finalBest.append(val)
-            
-    submitArr = sortBest(finalBest)
-            
-    os.remove("best.pickle")
-    with open(r"best.pickle", "wb") as output_file:
-        cPickle.dump(submitArr, output_file)
+    curArr = yahooLoad(val)
+    curPat = currentPat(curArr)
+    matchedPat,matchedEndInd = matchPats(patCollect,endingInd,curPat)
+    futureAverages,stDev = plotting(matchedPat,matchedEndInd)
+    totalDict = {'matches': matchedPat,'current': curPat,'future': futureAverages, 'stDev': stDev}
+    bestCollect.append(totalDict)
+
 
 
 # In[19]:
@@ -232,12 +211,22 @@ arr = ['MMM','ABT','ABBV','ACN','ATVI','AYI','ADBE','AAP','AES','AET','AMG','AFL
 'URI','UTX','UHS','UNM','URBN','VFC','VLO','VAR','VTR','VRSN','VRSK','VZ','VRTX','VIAB','V','VNO','VMC','WMT','WBA','WM','WAT','WFC',
 'HCN','WDC','WU','WRK','WY','WHR','WFM','WMB','WLTW','WEC','WYN','WYNN','XEL','XRX','XLNX','XL','XYL','YHOO','YUM','ZBH','ZION','ZTS']
 
+pool = ThreadPool(4)
+curArr = pool.map(bestGo, arr)
+pool.close()
+pool.join()
 
-# In[20]:
 
-bestGo()
-
-
+finalBest = []
+for val in bestCollect:
+    if ((val['future'][-1])/(val['stDev'][-1])) > 0.70:
+        finalBest.append(val)
+        
+submitArr = sortBest(finalBest)
+        
+os.remove("best.pickle")
+with open(r"best.pickle", "wb") as output_file:
+    cPickle.dump(submitArr, output_file)
 # In[ ]:
 
 
