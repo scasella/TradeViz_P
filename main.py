@@ -255,11 +255,11 @@ def main(tickerSubmit, numSelect):
 
 @get('/best')
 def best():
-    e = []
+    t = []
     with open(r"best.pickle", "rb") as input_file:
-        e.append(cPickle.load(input_file))
+        t = cPickle.load(input_file)
 
     response.headers['Content-Type'] = 'application/json'
-    return json.dumps(e)
+    return t
 
 run(host='0.0.0.0', port=argv[1])
