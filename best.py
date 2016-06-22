@@ -31,7 +31,7 @@ def percentChange(startPoint,currentPoint):
 def loadPats():
     global priceArr
     priceArr = []
-    with open(r"TradeViz_P/one.pickle", "rb") as input_file:
+    with open(r"one.pickle", "rb") as input_file:
         e = cPickle.load(input_file)
         priceArr = e
 
