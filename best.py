@@ -177,7 +177,7 @@ def bestGo(val):
         curPat = currentPat(curArr)
         matchedPat,matchedEndInd = matchPats(patCollect,endingInd,curPat)
         futureAverages,stDev = plotting(matchedPat,matchedEndInd)
-        totalDict = {'matches': matchedPat,'current': curPat,'future': futureAverages, 'stDev': stDev}
+        totalDict = {'symbol': val,'matches': matchedPat,'current': curPat,'future': futureAverages, 'stDev': stDev, 'sharpe': futureAverages[-1]/stDev[-1]}
         bestCollect.append(totalDict)
     except:
         bestCollect.append({'error':'error'})
@@ -190,14 +190,14 @@ arr = ['MMM','ABT','ABBV','ACN','ATVI','AYI','ADBE','AAP','AES','AET','AMG','AFL
 'ALK','AA','ALXN','ALLE','AGN','ADS','ALL','GOOGL','GOOG','MO','AMZN','AEE','AAL','AEP','AXP','AIG','AMT',
 'AWK','AMP','ABC','AME','AMGN','APH','APC','ADI','ANTM','AON','APA','AIV','AAPL','AMAT','ADM','AJG','AIZ','T','ADSK','ADP',
 'AN','AZO','AVGO','AVB','AVY','BHI','BLL','BAC','BCR','BAX','BBT','BDX','BBBY','BRK-B','BBY','BIIB','BLK','HRB','BA','BWA','BXP',
-'BSX','BMY','BF-B','CHRW','CA','CVC','COG','CPB']#'COF','CAH','KMX','CCL','CAT','CBG','CBS','CELG','CNC','CNP','CTL','CERN','CF',
-#'SCHW','CHK','CVX','CMG','CB','CHD','CI','XEC','CINF','CTAS','CSCO','C','CFG','CTXS','CME','CMS','COH','CTSH','CL','CPGX','CMCSA',
-#'CMA','CAG','CXO','COP','ED','STZ','GLW','COST','CCI','CSRA','CSX','CMI','CVS','DHI','DHR','DRI','DVA','DE','DLPH','DAL','XRAY',
-#'DVN','DO','DLR','DFS','DISCA','DISCK','DG','DLTR','D','DOV','DOW','DPS','DTE','DD','DUK','DNB','ETFC','EMN','ETN','EBAY','ECL',
-#'EIX','EW','EA','EMC','EMR','ENDP','ETR','EOG','EQT','EFX','EQIX','EQR','ESS','EL','ES','EXC','EXPE','EXPD','ESRX','EXR','XOM',
-#'FFIV','FB','FAST','FRT','FDX','FIS','FITB','FSLR','FE','FISV','FLIR','FLS','FLR','FMC','FTI','FL','F','BEN','FCX','FTR','GPS',
-#'GRMN','GD','GE','GGP','GIS','GM','GPC','GILD','GPN','GS','GT','GWW','HAL','HBI','HOG','HAR','HRS','HIG','HAS','HCA','HCP','HP',
-#'HSIC','HES','HPE','HOLX','HD','HON','HRL','HST','HPQ','HUM','HBAN','ITW','ILMN','IR','INTC','ICE','IBM','IP','IPG','IFF','INTU',
+'BSX','BMY','BF-B','CHRW','CA','CVC','COG','CPB','COF','CAH','KMX','CCL','CAT','CBG','CBS','CELG','CNC','CNP','CTL','CERN','CF',
+'SCHW','CHK','CVX','CMG','CB','CHD','CI','XEC','CINF','CTAS','CSCO','C','CFG','CTXS','CME','CMS','COH','CTSH','CL','CPGX','CMCSA',
+'CMA','CAG','CXO','COP','ED','STZ','GLW','COST','CCI','CSRA','CSX','CMI','CVS','DHI','DHR','DRI','DVA','DE','DLPH','DAL','XRAY',
+'DVN','DO','DLR','DFS','DISCA','DISCK','DG','DLTR','D','DOV','DOW','DPS','DTE','DD','DUK','DNB','ETFC','EMN','ETN','EBAY','ECL',
+'EIX','EW','EA','EMC','EMR','ENDP','ETR','EOG','EQT','EFX','EQIX','EQR','ESS','EL','ES','EXC','EXPE','EXPD','ESRX','EXR','XOM',
+'FFIV','FB','FAST','FRT','FDX','FIS','FITB','FSLR','FE','FISV','FLIR','FLS','FLR','FMC','FTI','FL','F','BEN','FCX','FTR','GPS',
+'GRMN','GD','GE','GGP','GIS','GM','GPC','GILD','GPN','GS','GT','GWW','HAL','HBI','HOG','HAR','HRS','HIG','HAS','HCA','HCP','HP',
+'HSIC','HES','HPE','HOLX','HD','HON','HRL','HST','HPQ','HUM','HBAN','ITW','ILMN','IR','INTC','ICE','IBM','IP','IPG','IFF','INTU']
 #'ISRG','IVZ','IRM','JBHT','JEC','JNJ','JCI','JPM','JNPR','KSU','K','KEY','KMB','KIM','KMI','KLAC','KSS','KHC','KR','LB','LLL','LH',
 #'LRCX','LM','LEG','LEN','LUK','LVLT','LLY','LNC','LLTC','LKQ','LMT','L','LOW','LYB','MTB','MAC','M','MNK','MRO','MPC','MAR','MMC',
 #'MLM','MAS','MA','MAT','MKC','MCD','MCK','MJN','MDT','MRK','MET','KORS','MCHP','MU','MSFT','MHK','TAP','MDLZ','MON','MNST','MCO','MS',
@@ -218,7 +218,7 @@ pool.join()
 
 finalBest = []
 for val in bestCollect:
-    if ((val['future'][-1])/(val['stDev'][-1])) > 0.75:
+    if val['sharpe'] > 0.75:
         finalBest.append(val)
 
 submitArr = sortBest(finalBest)
