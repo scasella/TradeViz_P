@@ -6,7 +6,7 @@
 import numpy as np
 np.seterr(divide='ignore', invalid='ignore')
 import urllib2
-#from multiprocessing.dummy import Pool as ThreadPool
+from multiprocessing.dummy import Pool as ThreadPool
 import math
 import cPickle
 import os
