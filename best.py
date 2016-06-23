@@ -19,6 +19,7 @@ patCollect = []
 endingInd = []
 patLen = 10
 futureE = 10
+quoteCollect = []
 
 def percentChange(startPoint,currentPoint):
     try:
@@ -30,6 +31,7 @@ def percentChange(startPoint,currentPoint):
 
 def loadPats():
     global priceArr
+    
     priceArr = []
     with open(r"one.pickle", "rb") as input_file:
         e = cPickle.load(input_file)
@@ -67,6 +69,7 @@ collectPats()
 # In[6]:
 
 def yahooLoad(val):
+    global quoteCollect
     tempArr = []
     string = ""
     string = 'http://ichart.finance.yahoo.com/table.csv?s={0}'.format(val)
@@ -77,7 +80,7 @@ def yahooLoad(val):
         close = csv[bar].split(',')[6]
         tempArr.append(float(close))
     tempArr = tempArr[::-1]
-    return tempArr
+    quoteCollect.append({val: tempArr})
 
 
 def currentPat(curArr):
@@ -170,18 +173,18 @@ def sortBest(array):
 
 bestCollect = []
 
-def bestGo(val):
+def bestGo(val,curArr):
     global bestCollect
-    try:
-        curArr = yahooLoad(val)
-        curPat = currentPat(curArr)
-        matchedPat,matchedEndInd = matchPats(patCollect,endingInd,curPat)
-        futureAverages,stDev = plotting(matchedPat,matchedEndInd)
-        totalDict = {'symbol': val,'matches': matchedPat,'current': curPat,'future': futureAverages, 'stDev': stDev, 'sharpe': futureAverages[-1]/stDev[-1]}
-        bestCollect.append(totalDict)
-    except:
-        bestCollect.append({'error':'error'})
-        pass
+
+    #curArr = yahooLoad(val)
+    curPat = currentPat(curArr)
+    matchedPat,matchedEndInd = matchPats(patCollect,endingInd,curPat)
+    futureAverages,stDev = plotting(matchedPat,matchedEndInd)
+    totalDict = {'symbol': val,'matches': matchedPat,'current': curPat,'future': futureAverages, 'stDev': stDev, 'sharpe': futureAverages[-1]/stDev[-1]}
+    bestCollect.append(totalDict)
+    #except:
+     #   bestCollect.append({'error':'error'})
+      #  pass
 
 
 # In[19]:
@@ -211,13 +214,15 @@ arr = ['MMM','ABT','ABBV','ACN','ATVI','AYI','ADBE','AAP','AES','AET','AMG','AFL
 #'URI','UTX','UHS','UNM','URBN','VFC','VLO','VAR','VTR','VRSN','VRSK','VZ','VRTX','VIAB','V','VNO','VMC','WMT','WBA','WM','WAT','WFC',
 #'HCN','WDC','WU','WRK','WY','WHR','WFM','WMB','WLTW','WEC','WYN','WYNN','XEL','XRX','XLNX','XL','XYL','YHOO','YUM','ZBH','ZION','ZTS']
 
-for i in arr:
-    bestGo(i)
 
-#pool = ThreadPool(4)
-#pool.map(bestGo, arr)
-#pool.close()
-#pool.join()
+
+pool = ThreadPool(4)
+pool.map(yahooLoad, arr)
+pool.close()
+pool.join()
+
+for key,value in quoteCollect.iteritems():
+    bestGo(key,value)
 
 finalBest = []
 for val in bestCollect:
