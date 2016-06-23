@@ -220,9 +220,9 @@ quoteCollect = pool.map(yahooLoad, arr)
 pool.close()
 pool.join()
 
- for i in quoteCollect:
-        for key,value in i.iteritems():
-             bestGo(key,value)
+for i in quoteCollect:
+    for key,value in i.iteritems():
+        bestGo(key,value)
 
 
 #finalBest = []
