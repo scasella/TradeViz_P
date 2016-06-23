@@ -6,7 +6,7 @@
 import numpy as np
 np.seterr(divide='ignore', invalid='ignore')
 import urllib2
-from multiprocessing.dummy import Pool as ThreadPool
+from multiprocessing import Pool as ThreadPool
 import math
 import cPickle
 import os
@@ -31,7 +31,7 @@ def percentChange(startPoint,currentPoint):
 
 def loadPats():
     global priceArr
-    
+
     priceArr = []
     with open(r"one.pickle", "rb") as input_file:
         e = cPickle.load(input_file)
@@ -69,7 +69,6 @@ collectPats()
 # In[6]:
 
 def yahooLoad(val):
-    global quoteCollect
     tempArr = []
     string = ""
     string = 'http://ichart.finance.yahoo.com/table.csv?s={0}'.format(val)
@@ -80,7 +79,8 @@ def yahooLoad(val):
         close = csv[bar].split(',')[6]
         tempArr.append(float(close))
     tempArr = tempArr[::-1]
-    quoteCollect[val] = tempArr
+    #quoteCollect[val] = tempArr
+    return {val: tempArr}
 
 
 def currentPat(curArr):
@@ -184,7 +184,7 @@ def bestGo(val,curArr):
     bestCollect.append(totalDict)
     #except:
      #   bestCollect.append({'error':'error'})
-      #  pass
+    #  pass
 
 
 # In[19]:
@@ -215,21 +215,23 @@ arr = ['MMM','ABT','ABBV','ACN','ATVI','AYI','ADBE','AAP','AES','AET','AMG','AFL
 #'HCN','WDC','WU','WRK','WY','WHR','WFM','WMB','WLTW','WEC','WYN','WYNN','XEL','XRX','XLNX','XL','XYL','YHOO','YUM','ZBH','ZION','ZTS']
 
 
-
 pool = ThreadPool(4)
-pool.map(yahooLoad, arr)
+quoteCollect = pool.map(yahooLoad, arr)
 pool.close()
 pool.join()
 
-for key,value in quoteCollect.iteritems():
-    bestGo(key,value)
+ for i in quoteCollect:
+        for key,value in i.iteritems():
+             bestGo(key,value)
 
-finalBest = []
-for val in bestCollect:
-    if val['sharpe'] > 0.75:
-        finalBest.append(val)
 
-submitArr = sortBest(finalBest)
+#finalBest = []
+#for val in bestCollect:
+#    if val['sharpe'] > 0.75:
+#        finalBest.append(val)
+#print(bestCollect)
+
+submitArr = sortBest(bestCollect)
 
 os.remove("best.pickle")
 with open(r"best.pickle", "wb") as output_file:
