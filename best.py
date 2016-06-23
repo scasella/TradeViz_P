@@ -19,7 +19,7 @@ patCollect = []
 endingInd = []
 patLen = 10
 futureE = 10
-quoteCollect = []
+quoteCollect = {}
 
 def percentChange(startPoint,currentPoint):
     try:
@@ -80,7 +80,7 @@ def yahooLoad(val):
         close = csv[bar].split(',')[6]
         tempArr.append(float(close))
     tempArr = tempArr[::-1]
-    quoteCollect.append({val: tempArr})
+    quoteCollect[val] = tempArr
 
 
 def currentPat(curArr):
