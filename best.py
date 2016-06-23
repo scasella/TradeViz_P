@@ -6,7 +6,7 @@
 import numpy as np
 np.seterr(divide='ignore', invalid='ignore')
 import urllib2
-from multiprocessing.dummy import Pool as ThreadPool
+#from multiprocessing.dummy import Pool as ThreadPool
 import math
 import cPickle
 import os
@@ -211,10 +211,13 @@ arr = ['MMM','ABT','ABBV','ACN','ATVI','AYI','ADBE','AAP','AES','AET','AMG','AFL
 #'URI','UTX','UHS','UNM','URBN','VFC','VLO','VAR','VTR','VRSN','VRSK','VZ','VRTX','VIAB','V','VNO','VMC','WMT','WBA','WM','WAT','WFC',
 #'HCN','WDC','WU','WRK','WY','WHR','WFM','WMB','WLTW','WEC','WYN','WYNN','XEL','XRX','XLNX','XL','XYL','YHOO','YUM','ZBH','ZION','ZTS']
 
-pool = ThreadPool(4)
-pool.map(bestGo, arr)
-pool.close()
-pool.join()
+for i in arr:
+    bestGo(i)
+
+#pool = ThreadPool(4)
+#pool.map(bestGo, arr)
+#pool.close()
+#pool.join()
 
 finalBest = []
 for val in bestCollect:
