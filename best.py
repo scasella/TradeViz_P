@@ -209,8 +209,3 @@ for val in bestCollect:
         finalBest.append(val)
 
 bestArr = sortBest(bestCollect)
-
-
-#os.remove("best.pickle")
-#with open(r"best.pickle", "wb") as output_file:
-#    cPickle.dump(bestCollect, output_file)
