@@ -12,6 +12,7 @@ import urllib2
 from multiprocessing.dummy import Pool as ThreadPool
 import math
 import cPickle
+from best import bestArr
 
 import json
 
@@ -254,11 +255,8 @@ def main(tickerSubmit, numSelect):
 
 @get('/best')
 def best():
-    t = []
-    with open(r"best.pickle", "rb") as input_file:
-        t = cPickle.load(input_file)
 
     response.headers['Content-Type'] = 'application/json'
-    return json.dumps(t)
+    return json.dumps(bestArr)
 
 run(host='0.0.0.0', port=argv[1])

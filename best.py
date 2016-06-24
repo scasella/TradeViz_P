@@ -208,8 +208,9 @@ for val in bestCollect:
     if val['sharpe'] > 0.75:
         finalBest.append(val)
 
-submitArr = sortBest(bestCollect)
+bestArr = sortBest(bestCollect)
+
 
 #os.remove("best.pickle")
-with open(r"best.pickle", "wb") as output_file:
-    cPickle.dump(bestCollect, output_file)
+#with open(r"best.pickle", "wb") as output_file:
+#    cPickle.dump(bestCollect, output_file)
