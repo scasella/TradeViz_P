@@ -203,10 +203,13 @@ for i in quoteCollect:
     for key,value in i.iteritems():
         bestGo(key,value)
 
-
 finalBest = []
 for val in bestCollect:
     if val['sharpe'] > 0.75:
         finalBest.append(val)
 
-bestArr = sortBest(bestCollect)
+bestArr = sortBest(finalBest)
+
+os.remove("best.pickle")
+with open(r"best.pickle", "wb") as output_file:
+    cPickle.dump(bestArr, output_file)

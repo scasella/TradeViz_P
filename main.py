@@ -253,10 +253,14 @@ def main(tickerSubmit, numSelect):
     #return 'hello world'
     return json.dumps(totalDict)
 
-#@get('/best')
-#def best():
+@get('/best')
+def best():
 
-#    response.headers['Content-Type'] = 'application/json'
-#    return json.dumps(bestArr)
+    t = []
+    with open(r"best.pickle", "rb") as input_file:
+        t = cPickle.load(input_file)
+
+    response.headers['Content-Type'] = 'application/json'
+    return json.dumps(t)
 
 run(host='0.0.0.0', port=argv[1])
