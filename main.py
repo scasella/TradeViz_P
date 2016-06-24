@@ -12,7 +12,7 @@ import urllib2
 from multiprocessing.dummy import Pool as ThreadPool
 import math
 import cPickle
-from best import bestArr
+#from best import bestArr
 
 import json
 
@@ -253,10 +253,10 @@ def main(tickerSubmit, numSelect):
     #return 'hello world'
     return json.dumps(totalDict)
 
-@get('/best')
-def best():
+#@get('/best')
+#def best():
 
-    response.headers['Content-Type'] = 'application/json'
-    return json.dumps(bestArr)
+#    response.headers['Content-Type'] = 'application/json'
+#    return json.dumps(bestArr)
 
 run(host='0.0.0.0', port=argv[1])
