@@ -20,6 +20,7 @@ endingInd = []
 patLen = 10
 futureE = 10
 quoteCollect = {}
+bestArr = []
 
 def percentChange(startPoint,currentPoint):
     try:
