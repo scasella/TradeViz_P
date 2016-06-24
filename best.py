@@ -210,6 +210,6 @@ for val in bestCollect:
 
 submitArr = sortBest(bestCollect)
 
-os.remove("best.pickle")
+#os.remove("best.pickle")
 with open(r"best.pickle", "wb") as output_file:
     cPickle.dump(bestCollect, output_file)
