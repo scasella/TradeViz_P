@@ -21,19 +21,9 @@ _allow_methods = 'GET'
 _allow_headers = 'Authorization, Origin, Accept, Content-Type, X-Requested-With'
 
 
-priceArr = []
-patCollect = []
-endingInd = []
 patLen = 24
 futureE = 24
-curPat = []
-matchedPat = []
-matchedEndInd = []
-futureAverages = []
-stDev = []
-interval = 0
 totalDict = {}
-curArr = []
 
 def percentChange(startPoint,currentPoint):
     try:
@@ -44,8 +34,6 @@ def percentChange(startPoint,currentPoint):
         return 0.00000000001
 
 def loadQuote(val, interval):
-    global priceArr
-    global curArr
     priceArr = []
     curArr = []
     tempArr = []
@@ -66,11 +54,10 @@ def loadQuote(val, interval):
         with open(r"three.pickle", "rb") as input_file:
             e = cPickle.load(input_file)
             priceArr = e
+    return priceArr, curArr
 
 
 def yahooLoad(val):
-    global priceArr
-    global curArr
     priceArr = []
     curArr = []
     tempArr = []
@@ -87,12 +74,10 @@ def yahooLoad(val):
     with open(r"one.pickle", "rb") as input_file:
         e = cPickle.load(input_file)
         priceArr = e
+    return priceArr, curArr
 
 
-def currentPat():
-    global curPat
-    global patLen
-    global curArr
+def currentPat(curArr):
     curPat = []
     sliceLen = patLen
     curr = curArr[0][-(sliceLen+1):]
@@ -104,10 +89,10 @@ def currentPat():
         temp = percentChange(curr[i], curr[i + 1])
         curPat.append(temp)
         i += 1
+    return curPat
 
-def collectPats():
-    global patCollect
-    global endingInd
+
+def collectPats(priceArr):
     patCollect = []
     endingInd = []
     for each in priceArr:
@@ -128,7 +113,7 @@ def collectPats():
             sIndex += (patLen/2)
         patCollect.append(tempCollect)
         endingInd.append(tempEnd)
-
+    return patCollect, endingInd
 
 
 def sortPats(array):
@@ -139,13 +124,7 @@ def sortPats(array):
     return finalArr
 
 
-def matchPats():
-    colNum = 0
-    global MSE
-    global matchedEndInd
-    global matchedPat
-    global matchThresh
-    global patCollect
+def matchPats(patCollect,endingInd,curPat):
     matchedPat = []
     matchedEndInd = []
     bestMatches = []
@@ -162,14 +141,14 @@ def matchPats():
     for item in test[:10]:
         matchedPat.append(item[0][0])
         matchedEndInd.append((item[0][1],item[0][2]))
+    return matchedPat,matchedEndInd
 
 
-def plotting(isPlotting):
-    global futureAverages
-    global futureE
-    global stDev
+def plotting(matchedPat,matchedEndInd,priceArr):
     futureLine = []
     futurePercent = []
+    futureAverages = []
+    stDev = []
     if len(matchedPat) > 1:
         for i in matchedPat:
             tempPercent = []
@@ -191,39 +170,32 @@ def plotting(isPlotting):
                 stDev.append(np.std(tempOutcomes))
 
 def runGo(ticker,selection):
-    global futureAverages
-    global stDev
-    global patLen
     global totalDict
-    global curArr
-    global matchedPat
+
+    priceArr = []
+    curArr = []
 
     if selection == 1:
 
         patLen = 10
-        yahooLoad(ticker)
-
+        priceArr,curArr = yahooLoad(ticker)
 
     elif selection == 2:
 
         patLen = 24
-        loadQuote(ticker,3600)
-
+        priceArr,curArr = loadQuote(ticker,3600)
 
     elif selection == 3:
 
         patLen = 24
-        loadQuote(ticker,900)
+        priceArr,curArr = loadQuote(ticker,900)
 
-
-    currentPat()
-    collectPats()
-    matchPats()
-    plotting(True)
+    curPat = currentPat(curArr)
+    patCollect,endingInd = collectPats(priceArr)
+    matchedPat,matchedEndInd = matchPats(patCollect,endingInd,curPat)
+    plotting(matchedPat,matchedEndInd,priceArr)
     totalDict = {'matches': matchedPat,'current': curPat,'future': futureAverages, 'stDev': stDev}
-    futureAverages = []
-    stDev = []
-    curArr = []
+
 
 @hook('after_request')
 def enable_cors():
