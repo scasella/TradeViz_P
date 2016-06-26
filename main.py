@@ -256,11 +256,7 @@ def main(tickerSubmit, numSelect):
 @get('/best')
 def best():
 
-    t = "1"
-
-    os.remove("best.pickle")
-    with open(r"best.pickle", "wb") as output_file:
-        cPickle.dump("5", output_file)
+    t = []
 
     with open(r"best.pickle", "rb") as input_file:
         t = cPickle.load(input_file)
