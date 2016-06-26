@@ -149,25 +149,25 @@ def plotting(matchedPat,matchedEndInd,priceArr):
     futurePercent = []
     futureAverages = []
     stDev = []
-    if len(matchedPat) > 1:
-        for i in matchedPat:
-            tempPercent = []
-            refInd = matchedPat.index(i)
-            endInd = matchedEndInd[refInd]
-            col = endInd[0]
-            outcomesZ = priceArr[col][endInd[1]:(endInd[1]+patLen)]
-            futureLine.append(outcomesZ)
-            for x in outcomesZ:
-                change = percentChange(priceArr[col][endInd[1]],x)
-                tempPercent.append(change)
-            futurePercent.append(tempPercent)
+    for i in matchedPat:
+        tempPercent = []
+        refInd = matchedPat.index(i)
+        endInd = matchedEndInd[refInd]
+        col = endInd[0]
+        outcomesZ = priceArr[col][endInd[1]:(endInd[1]+patLen)]
+        futureLine.append(outcomesZ)
+        for x in outcomesZ:
+            change = percentChange(priceArr[col][endInd[1]],x)
+            tempPercent.append(change)
+        futurePercent.append(tempPercent)
 
-        for arrItemNum in range(len(futurePercent[0])):
-                tempOutcomes = []
-                for arr in futurePercent:
-                    tempOutcomes.append(arr[arrItemNum])
-                futureAverages.append(np.mean(tempOutcomes))
-                stDev.append(np.std(tempOutcomes))
+    for arrItemNum in range(len(futurePercent[0])):
+            tempOutcomes = []
+            for arr in futurePercent:
+                tempOutcomes.append(arr[arrItemNum])
+            futureAverages.append(np.mean(tempOutcomes))
+            stDev.append(np.std(tempOutcomes))
+    return futureAverages,stDev
 
 def runGo(ticker,selection):
     global totalDict
@@ -193,7 +193,7 @@ def runGo(ticker,selection):
     curPat = currentPat(curArr)
     patCollect,endingInd = collectPats(priceArr)
     matchedPat,matchedEndInd = matchPats(patCollect,endingInd,curPat)
-    plotting(matchedPat,matchedEndInd,priceArr)
+    futureAverages,stDev = plotting(matchedPat,matchedEndInd,priceArr)
     totalDict = {'matches': matchedPat,'current': curPat,'future': futureAverages, 'stDev': stDev}
 
 
