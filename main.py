@@ -254,9 +254,9 @@ def main(tickerSubmit, numSelect):
     return json.dumps(totalDict)
 
 @get('/best')
-def best(numb):
+def best():
 
-    t = []
+    t = "1"
 
     os.remove("best.pickle")
     with open(r"best.pickle", "wb") as output_file:
