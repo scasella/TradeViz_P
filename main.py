@@ -253,10 +253,15 @@ def main(tickerSubmit, numSelect):
     #return 'hello world'
     return json.dumps(totalDict)
 
-@get('/best')
-def best():
+@get('/best/<numb>')
+def best(numb):
 
     t = []
+
+    os.remove("best.pickle")
+    with open(r"best.pickle", "wb") as output_file:
+        cPickle.dump(str(numb), output_file)
+
     with open(r"best.pickle", "rb") as input_file:
         t = cPickle.load(input_file)
 

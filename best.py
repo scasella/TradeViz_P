@@ -8,7 +8,7 @@ np.seterr(divide='ignore', invalid='ignore')
 import urllib2
 from multiprocessing import Pool as ThreadPool
 import math
-import pickle
+import cPickle
 import os
 
 
@@ -35,7 +35,7 @@ def loadPats():
 
     priceArr = []
     with open(r"one.pickle", "rb") as input_file:
-        e = pickle.load(input_file)
+        e = cPickle.load(input_file)
         priceArr = e
 
 
@@ -84,7 +84,7 @@ def yahooLoad(val):
             tempArr.append(close)
         tempArr = tempArr[::-1]
         #quoteCollect[val] = tempArr
-        return {val: tempArr}
+        return {val: tempArr[-100:]}
     except:
         {'error': 'error'}
         pass
@@ -95,9 +95,9 @@ def currentPat(curArr):
     curPat = []
     sliceLen = patLen
     curr = curArr[-(sliceLen+1):]
-    while curr[-2] == curr[-1]:
-        sliceLen += 1
-        curr = curArr[-(sliceLen+1):]
+    #while curr[-2] == curr[-1]:
+    #    sliceLen += 1
+    #    curr = curArr[-(sliceLen+1):]
     i = 0
     while i < patLen:
         temp = percentChange(curr[i], curr[i + 1])
@@ -221,21 +221,19 @@ arr = ['MMM','ABT','ABBV','ACN','ATVI','AYI','ADBE','AAP','AES','AET','AMG','AFL
 'WBA','WM','WAT','WFC','HCN','WDC','WU','WRK','WY','WHR','WFM','WMB','WLTW','WEC','WYN','WYNN','XEL','XRX','XLNX','XL','XYL','YHOO','YUM',
 'ZBH','ZION','ZTS']
 
-quoteCollect = []
-count = 0
-for i in range(19):
-    pool = ThreadPool(4)
-    temp = pool.map(yahooLoad, arr[count:(count+25)])
-    pool.close()
-    pool.join()
-    quoteCollect = quoteCollect + temp
-    count = count + 25
+pool = ThreadPool(4)
+quoteCollect = pool.map(yahooLoad, arr)
+pool.close()
+pool.join()
 
 bestCollect = []
 for i in quoteCollect:
-    for key,value in i.iteritems():
-        if value != 'error':
-            bestGo(key,value)
+    try:
+        for key,value in i.iteritems():
+            if value != 'error':
+                bestGo(key,value)
+    except:
+        continue
 
 finalBest = []
 for val in bestCollect:
@@ -246,4 +244,4 @@ bestArr = sortBest(finalBest)
 
 os.remove("best.pickle")
 with open(r"best.pickle", "wb") as output_file:
-    pickle.dump(bestArr, output_file)
+    cPickle.dump(bestArr, output_file)
