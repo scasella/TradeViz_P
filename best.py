@@ -237,7 +237,7 @@ for i in quoteCollect:
 
 finalBest = []
 for val in bestCollect:
-    if val['sharpe'] > 1.00:
+    if val['sharpe'] > 0.85:
         finalBest.append(val)
 
 bestArr = sortBest(finalBest)
