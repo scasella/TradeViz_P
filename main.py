@@ -171,6 +171,7 @@ def plotting(matchedPat,matchedEndInd,priceArr):
 
 def runGo(ticker,selection):
     global totalDict
+    global patLen
 
     priceArr = []
     curArr = []
