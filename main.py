@@ -237,4 +237,23 @@ def best():
     response.headers['Content-Type'] = 'application/json'
     return json.dumps(t)
 
+@get('/quotes')
+def quotes():
+    arr = ['SPY','TLT','AAPL','GOOGL','AMZN','NFLX','BAC','JPM','MCD','TSLA','MCD','NKE','MSFT',
+      'XLE','XLF','QQQ','FB','VZ','GE','BA','HD','DIS','JNJ','GS','PCLN','MS','TJX','M','SBUX','XOM','V','MA',
+      'XLU','IBM','INTC','XLV','XLI','IYR','XLY','EEM','FXI','GLD','SLV','GDX','FXE','UUP','HYG','SMH']
+
+    string = ""
+    for ind,val in enumerate(arr):
+        if ind != (len(arr)-1):
+            string = string+val+","
+        else:
+            string = string+val
+
+    response = urllib2.urlopen('http://finance.yahoo.com/webservice/v1/symbols/'+string+'/quote?format=json&view=detail')
+    dat = json.load(response)
+
+    response.headers['Content-Type'] = 'application/json'
+    return json.dumps(dat)
+
 run(host='0.0.0.0', port=argv[1])
