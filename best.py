@@ -95,9 +95,8 @@ def currentPat(curArr):
     curPat = []
     sliceLen = patLen
     curr = curArr[-(sliceLen+1):]
-    while curr[-3] == curr[-1]:
-        sliceLen += 1
-        curr = curArr[-(sliceLen+1):]
+    if curr[-3] == curr[-1]:
+        return ""
     i = 0
     while i < patLen:
         temp = percentChange(curr[i], curr[i + 1])
