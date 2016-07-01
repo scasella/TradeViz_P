@@ -256,4 +256,13 @@ def quotes():
     response.headers['Content-Type'] = 'application/json'
     return json.dumps(dat)
 
+@get('/quotes/<sym>')
+def quoteSym(sym):
+
+    response = urllib2.urlopen('http://finance.yahoo.com/webservice/v1/symbols/'+str(sym)+'/quote?format=json&view=detail')
+    dat = json.load(response)
+
+    response.headers['Content-Type'] = 'application/json'
+    return json.dumps(dat)
+
 run(host='0.0.0.0', port=argv[1])
