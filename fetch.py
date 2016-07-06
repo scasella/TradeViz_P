@@ -1,17 +1,17 @@
 import urllib2
 from multiprocessing.dummy import Pool as ThreadPool
 import cPickle
-import os 
+import os
 
 exportArr = []
 
 def yahooLoad(val):
-    try:    
+    try:
         global exportArr
         string = ""
         tempArr = []
         string = 'http://ichart.finance.yahoo.com/table.csv?s={0}'.format(val)
-    
+
         csv = urllib2.urlopen(string).readlines()
         #for bar in xrange(1,min(len(csv),500)):
         for bar in xrange(1,len(csv)):
@@ -31,7 +31,7 @@ def loadQuote(val):
         tempArr = []
         string = ""
         string = 'https://www.google.com/finance/getprices?q={0}&i={1}&p=200d&f=d,c'.format(val,interval)
-    
+
         csv = urllib2.urlopen(string).readlines()
         for bar in xrange(7,len(csv)):
             offset,close = csv[bar].split(',')
@@ -86,7 +86,7 @@ arr = ['MMM','ABT','ABBV','ACN','ATVI','AYI','ADBE','AAP','AES','AET','AMG','AFL
 
 exportArr = []
 
-interval = 3600 
+interval = 3600
 pool = ThreadPool(4)
 pool.map(loadQuote, arr)
 
@@ -123,11 +123,10 @@ arr = ['MMM','ABT','ABBV','ACN','ATVI','AYI','ADBE','AAP','AES','AET','AMG','AFL
 
 exportArr = []
 
-interval = 900 
+interval = 900
 pool = ThreadPool(4)
 pool.map(loadQuote, arr)
 
 os.remove("three.pickle")
 with open(r"three.pickle", "wb") as output_file:
     cPickle.dump(exportArr, output_file)
-
