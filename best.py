@@ -242,6 +242,51 @@ for val in bestCollect:
 
 bestArr = sortBest(finalBest)
 
+#Creation of SPX line
+
+weights = {}
+count = 0
+for line in urllib2.urlopen('file:///Users/sjcasella/Desktop/TradeViz_P/spxw.csv'):
+    nLine = (line.replace('"','')).replace('%','')
+    if count == 0:
+        count = 1
+        continue
+    ticker = str(nLine.split(',')[0])
+    try:
+        weight = float(nLine.split(',')[2])/100
+    except:
+        continue
+    weights[ticker] = weight
+
+tempArr = {}
+for i in bestCollect:
+    if 'error' in i:
+        continue
+    tempVals = {}
+    val = i['future']
+    tempArr[i['symbol']] = val
+
+totalW = 0.0
+for key,val in tempArr.iteritems():
+    if key in weights:
+        totalW = totalW + weights[key]
+
+spxLine = []
+for key,val in tempArr.iteritems():
+    if key in weights:
+        weight = weights[key]/totalW
+        spxLine.append([i * weight for i in val])
+
+spxLen = len(spxLine[0])
+spxFinal = []
+for ind in range(spxLen):
+    totalEach = 0.0
+    for subArr in spxLine:
+        totalEach = totalEach + subArr[ind]
+    spxFinal.append(totalEach)
+
+bestArr.append({'symbol':'SPXLINE','future':spxFinal})
+
 os.remove("best.pickle")
 with open(r"best.pickle", "wb") as output_file:
     cPickle.dump(bestArr, output_file)
