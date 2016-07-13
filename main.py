@@ -250,8 +250,9 @@ def quotes():
         else:
             string = string+val
 
-    response = urllib2.urlopen('http://finance.yahoo.com/webservice/v1/symbols/'+string+'/quote?format=json&view=detail')
-    dat = json.load(response)
+    u = urllib2.urlopen('http://finance.google.com/finance/info?client=ig&q='+string)
+    content = u.read()
+    dat = json.loads(content[3:])
 
     response.headers['Content-Type'] = 'application/json'
     return json.dumps(dat)
@@ -259,8 +260,9 @@ def quotes():
 @get('/quotes/<sym>')
 def quoteSym(sym):
 
-    response = urllib2.urlopen('http://finance.yahoo.com/webservice/v1/symbols/'+str(sym)+'/quote?format=json&view=detail')
-    dat = json.load(response)
+    u = urllib2.urlopen('http://finance.google.com/finance/info?client=ig&q='+str(sym))
+    content = u.read()
+    dat = json.loads(content[3:])
 
     response.headers['Content-Type'] = 'application/json'
     return json.dumps(dat)
